@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Recruitment helper</string>
+    <string name="sign_up_text1">Виберіть найзручніший для себе спосіб реєстрація</string>
+    <string name="sign_up_btn_email">Cтворити акаунт через email</string>
+    <string name="sign_up_btn_linkedin">створити акаунт через LinkedIn</string>
+    <string name="sign_up_text2">Реєстрація за допомогою соціальної мережі LinkedIn дозволить завантажити в додаток інформацію про ваших друзів.</string>
+    <string name="name">Ім’я</string>
+    <string name="email">Адреса електронної пошти</string>
+    <string name="lastname">Прізвище</string>
+    <string name="phone">Номер телефону</string>
+    <string name="password">Пароль</string>
+    <string name="reenter_password">Введіть пароль ще раз</string>
+</resources>

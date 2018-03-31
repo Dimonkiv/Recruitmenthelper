@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/sign_up_by_email_toolbar"
+        style="@style/Toolbar" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+
+        <ImageButton
+            android:id="@+id/sign_up_by_email_btn_load_photo"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/icon_photo" />
+        <ImageView
+            android:id="@+id/sign_up_by_email_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/circle_button" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/sign_up_by_email_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_person"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:nextFocusDown="@id/sign_up_by_email_lastname" />
+
+        <EditText
+            android:id="@+id/sign_up_by_email_lastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_person"
+            android:hint="@string/lastname"
+            android:inputType="text"
+            android:nextFocusDown="@id/sign_up_by_email_email" />
+
+        <EditText
+            android:id="@+id/sign_up_by_email_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_mail"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:nextFocusDown="@id/sign_up_by_email_phone" />
+
+        <EditText
+            android:id="@+id/sign_up_by_email_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_phone"
+            android:hint="@string/phone"
+            android:inputType="number"
+            android:nextFocusDown="@id/sign_up_by_email_password" />
+
+        <EditText
+            android:id="@+id/sign_up_by_email_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_password"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:nextFocusDown="@id/sign_up_by_email_reenter_password" />
+
+        <EditText
+            android:id="@+id/sign_up_by_email_reenter_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_password"
+            android:hint="@string/reenter_password"
+            android:inputType="textPassword" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
