@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_drawer_my_page"
+        android:icon="@drawable/icon_person"
+        android:title="@string/my_page" />
+    <item
+        android:id="@+id/navigation_drawer_main_screen"
+        android:icon="@drawable/icon_my_page"
+        android:title="@string/main_screen" />
+    <item
+        android:id="@+id/navigation_drawer_add_contact"
+        android:icon="@drawable/icon_add"
+        android:title="@string/add_contact_from_phone_book" />
+    <item
+        android:id="@+id/navigation_drawer_import_linkedin"
+        android:icon="@drawable/icon_import"
+        android:title="@string/import_contacts_from_linkedin" />
+    <item
+        android:id="@+id/navigation_drawer_selected_contacts"
+        android:icon="@drawable/icon_star"
+        android:title="@string/selected_contacts" />
+    <item
+        android:id="@+id/navigation_drawer_settings"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/navigation_drawer_logout"
+        android:icon="@drawable/icon_exit"
+        android:title="@string/log_out" />
+</menu>

@@ -80,7 +80,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_add_a_photo_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_reorder_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -91,7 +91,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="757575" />
-                            <entry key="outputName" value="icon_photo" />
+                            <entry key="outputName" value="icon_list" />
                             <entry key="sourceFile" value="C:\Users\iw97d\Downloads\research.svg" />
                           </map>
                         </option>

@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
+import com.pllug.course.ivankiv.recruitmenthelper.data.db.AppDatabase;
+import com.pllug.course.ivankiv.recruitmenthelper.data.db.InitDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.activity.SignIn;
 
@@ -35,12 +37,14 @@ public class SignUpByEmail extends Fragment implements Contract.View {
     Uri imageUri;
     private Presenter presenter;
     private final int PICK_IMAGE = 1;
+    private AppDatabase database;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_sign_up_by_email, container, false);
         initView();
+        initDatabase();
         initPresenter();
         initListener();
         initToolbar();
@@ -48,6 +52,10 @@ public class SignUpByEmail extends Fragment implements Contract.View {
     }
 
     //Прив’язка ui елементів з java кодом
+
+    private void initDatabase() {
+        database = InitDatabase.getInstance().getDatabese();
+    }
     private void initView() {
         toolbar = root.findViewById(R.id.sign_up_by_email_toolbar);
 
@@ -64,7 +72,7 @@ public class SignUpByEmail extends Fragment implements Contract.View {
 
     //Ініціалізація презентера
     private void initPresenter() {
-        presenter = new Presenter(this);
+        presenter = new Presenter(this, database);
     }
 
     //Обробник кліків

@@ -1,8 +1,36 @@
 package com.pllug.course.ivankiv.recruitmenthelper.data.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity
 public class User {
-    private String name, lastname, email, phone,
-            password, reenterPassword, imageUri;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
+    private String name;
+
+    private String lastname;
+
+    private String email;
+
+    private String phone;
+
+    private String password;
+
+    private String imageUri;
+
+    @Ignore
+    private String reenterPassword;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

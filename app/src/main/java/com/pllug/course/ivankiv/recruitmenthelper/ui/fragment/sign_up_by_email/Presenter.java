@@ -2,6 +2,8 @@ package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.sign_up_by_email;
 
 
 
+import com.pllug.course.ivankiv.recruitmenthelper.data.db.AppDatabase;
+import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.UserDao;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 import com.pllug.course.ivankiv.recruitmenthelper.utils.CircularTransformation;
 import com.squareup.picasso.Picasso;
@@ -9,10 +11,14 @@ import com.squareup.picasso.Picasso;
 class Presenter implements Contract.Presenter {
     private Contract.View view;
     private User user;
+    private AppDatabase db;
+    private UserDao userDao;
 
 
-    public Presenter(Contract.View view) {
+    public Presenter(Contract.View view, AppDatabase db) {
         this.view = view;
+        this.db = db;
+        userDao = db.userDao();
     }
 
 
@@ -40,7 +46,7 @@ class Presenter implements Contract.Presenter {
             if (isEqualsPasswords()) {
                 //Якщо співпаать
                 //То заносимо дані в базу даних
-                //
+                userDao.insert(user);
                 success = true;
             }
         }

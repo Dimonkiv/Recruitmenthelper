@@ -15,7 +15,7 @@ import com.pllug.course.ivankiv.recruitmenthelper.ui.activity.SignIn;
 
 public class SignUp extends Fragment implements View.OnClickListener {
     private View root;
-    private Button btn_email;
+    private Button btn_email, goToMainActivity;
 
     @Nullable
     @Override
@@ -30,10 +30,12 @@ public class SignUp extends Fragment implements View.OnClickListener {
 
     private void initView() {
         btn_email = root.findViewById(R.id.sign_up_btn_email);
+        goToMainActivity = root.findViewById(R.id.sign_up_btn_go_to_main_activity);
     }
 
     private void initListener() {
         btn_email.setOnClickListener(this);
+        goToMainActivity.setOnClickListener(this);
     }
 
     @Override
@@ -42,6 +44,8 @@ public class SignUp extends Fragment implements View.OnClickListener {
             case R.id.sign_up_btn_email:
                 ((SignIn)getActivity()).showSignUpByEmail();
                 break;
+            case R.id.sign_up_btn_go_to_main_activity:
+                ((SignIn)getActivity()).goToMainActivity();
         }
     }
 }

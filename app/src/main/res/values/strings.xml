@@ -10,4 +10,15 @@
     <string name="phone">Номер телефону</string>
     <string name="password">Пароль</string>
     <string name="reenter_password">Введіть пароль ще раз</string>
+    <string name="my_page">Моя сторінка</string>
+    <string name="main_screen">Головний екран</string>
+    <string name="add_contact_from_phone_book">Додати з контактів</string>
+    <string name="import_contacts_from_linkedin">Імпорт контактів з LinkedIn</string>
+    <string name="with_star">Із зірочкою</string>
+    <string name="selected_contacts">Обрані контакти</string>
+    <string name="settings">Налаштування</string>
+    <string name="log_out">Вихід</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
 </resources>

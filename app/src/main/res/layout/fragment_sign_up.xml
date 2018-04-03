@@ -35,6 +35,16 @@
             android:textSize="17sp"
             android:layout_marginTop="20dp"
             android:text="@string/sign_up_btn_linkedin"/>
+        <Button
+            android:id="@+id/sign_up_btn_go_to_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:textColor="@color/textIconBackground"
+            android:textSize="17sp"
+            android:layout_marginTop="20dp"
+            android:text="Головний екран"/>
+
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
