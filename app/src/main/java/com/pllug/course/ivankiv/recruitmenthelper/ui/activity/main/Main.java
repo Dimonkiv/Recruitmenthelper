@@ -1,6 +1,5 @@
 package com.pllug.course.ivankiv.recruitmenthelper.ui.activity.main;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.PhoneContact;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.ContactsList;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.add_contact.AddContact;
 
 
 public class Main extends AppCompatActivity implements MainContract.View {
@@ -139,7 +139,7 @@ public class Main extends AppCompatActivity implements MainContract.View {
 
                 break;
             case R.id.navigation_drawer_add_contact:
-
+                showAddContact();
                 break;
             case R.id.navigation_drawer_selected_contacts:
 
@@ -174,7 +174,23 @@ public class Main extends AppCompatActivity implements MainContract.View {
 
     //Метод, який покаже головну сторінку
     public void showMainFragment() {
+        toolbar.setTitle("Головний екран");
         addFragment(new ContactsList());
+    }
+
+    //Метод, який показує екран для додавання контактів
+    public void showAddContact() {
+        replaceFragment(new AddContact());
+    }
+
+    //Метод, який показує фрагмет редагування екрану
+    public void showEditContactFragment (PhoneContact contact) {
+        EditContact editFragment = new EditContact();
+        Bundle args = new Bundle();
+        args.putSerializable("contact", contact);
+        editFragment.setArguments(args);
+
+        replaceFragment(editFragment);
     }
 
 

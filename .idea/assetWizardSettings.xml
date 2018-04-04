@@ -90,9 +90,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="757575" />
-                            <entry key="outputName" value="icon_list" />
-                            <entry key="sourceFile" value="C:\Users\iw97d\Downloads\research.svg" />
+                            <entry key="outputName" value="man" />
+                            <entry key="sourceFile" value="C:\Users\iw97d\Downloads\man.svg" />
                           </map>
                         </option>
                       </PersistentState>

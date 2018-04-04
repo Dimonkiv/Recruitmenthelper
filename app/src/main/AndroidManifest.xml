@@ -3,6 +3,7 @@
     package="com.pllug.course.ivankiv.recruitmenthelper">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".data.db.InitDatabase"
@@ -20,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.SignIn" />
-        <activity android:name=".ui.activity.main.Main"></activity>
+        <activity android:name=".ui.activity.main.Main" />
+        <activity android:name=".ui.activity.EditContact"></activity>
     </application>
 
 </manifest>
