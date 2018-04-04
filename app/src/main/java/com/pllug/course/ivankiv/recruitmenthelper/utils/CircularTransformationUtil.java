@@ -15,11 +15,11 @@ import com.squareup.picasso.Transformation;
  * Created by iw97d on 02.02.2018.
  */
 
-public class CircularTransformation implements Transformation {
+public class CircularTransformationUtil implements Transformation {
 
     private int mRadius = 10;
 
-    public CircularTransformation(final int radius) {
+    public CircularTransformationUtil(final int radius) {
         this.mRadius = radius;
     }
 

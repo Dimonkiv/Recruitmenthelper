@@ -1,5 +1,6 @@
 package com.pllug.course.ivankiv.recruitmenthelper.data.model;
 
+
 import java.io.Serializable;
 
 public class PhoneContact implements Serializable {

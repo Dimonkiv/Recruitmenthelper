@@ -1,19 +1,21 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.add_contact;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.main.presenter;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.PhoneContact;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.contract.AddContactContract;
+
 import java.util.ArrayList;
 import java.util.List;
 
-class AddContactPresenter implements AddContactContract.Presenter {
+public class AddContactPresenter implements AddContactContract.Presenter {
     private AddContactContract.View view;
     private PhoneContact phoneContact;
     private List<PhoneContact> contacts;
 
     //Конструктор
-    AddContactPresenter(AddContactContract.View view) {
+    public AddContactPresenter(AddContactContract.View view) {
         this.view = view;
     }
 

@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.adapter;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.main.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.PhoneContact;
-import com.pllug.course.ivankiv.recruitmenthelper.utils.CircularTransformation;
+import com.pllug.course.ivankiv.recruitmenthelper.utils.CircularTransformationUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class AddContactAdapter extends BaseAdapter {
         if (myViewHolder.avatar != null && contact.getPhotoUri() != null) {
             Picasso.with(context)
                     .load(contact.getPhotoUri())
-                    .transform(new CircularTransformation(220))
+                    .transform(new CircularTransformationUtil(220))
                     .into(myViewHolder.avatar);
         }
 
@@ -84,6 +84,8 @@ public class AddContactAdapter extends BaseAdapter {
 
 
     }
+
+
 
     private class MyViewHolder {
         private TextView name, phone;

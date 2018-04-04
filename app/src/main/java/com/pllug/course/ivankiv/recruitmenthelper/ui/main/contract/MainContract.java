@@ -1,8 +1,8 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.activity.main;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.main.contract;
 
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 
-interface MainContract {
+public interface MainContract {
     interface View {
 
     }

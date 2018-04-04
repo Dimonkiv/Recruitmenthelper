@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.add_contact;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.main.fragment;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +17,15 @@ import android.widget.Toast;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.PhoneContact;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.activity.main.Main;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.adapter.AddContactAdapter;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.contract.AddContactContract;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.presenter.AddContactPresenter;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.activity.MainActivity;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.adapter.AddContactAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddContact extends Fragment implements AddContactContract.View, AddContactAdapter.AddContactAdapterEventListener {
+public class AddContactFragment extends Fragment implements AddContactContract.View, AddContactAdapter.AddContactAdapterEventListener {
     private View root;
     private AddContactPresenter presenter;
     private List<PhoneContact> contacts;
@@ -97,7 +98,7 @@ public class AddContact extends Fragment implements AddContactContract.View, Add
 
     @Override
     public ContentResolver getContentResolver() {
-        return ((Main) getActivity()).getContentResolver();
+        return ((MainActivity) getActivity()).getContentResolver();
     }
 
     @Override
@@ -120,7 +121,7 @@ public class AddContact extends Fragment implements AddContactContract.View, Add
     public void openEditPage(int position) {
         Toast.makeText(getActivity(), "button", Toast.LENGTH_SHORT).show();
         PhoneContact contact = adapter.getItem(position);
-        ((Main) getActivity()).showEditContactFragment(contact);
+        ((MainActivity) getActivity()).goToEditActivity(contact);
 
     }
 }

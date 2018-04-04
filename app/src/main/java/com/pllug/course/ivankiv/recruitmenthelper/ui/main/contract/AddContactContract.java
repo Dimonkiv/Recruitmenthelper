@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.add_contact;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.main.contract;
 
 import android.content.ContentResolver;
 
@@ -6,7 +6,7 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.model.PhoneContact;
 
 import java.util.List;
 
-interface  AddContactContract {
+public interface  AddContactContract {
 
     interface View {
         ContentResolver getContentResolver();

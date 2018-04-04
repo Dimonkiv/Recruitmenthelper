@@ -1,5 +1,6 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.activity.main;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.main.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -18,11 +19,13 @@ import android.widget.Toast;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.PhoneContact;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.ContactsList;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.add_contact.AddContact;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.contract.MainContract;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.presenter.MainPresenter;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.fragment.ContactsListFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.fragment.AddContactFragment;
 
 
-public class Main extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity implements MainContract.View {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -175,22 +178,17 @@ public class Main extends AppCompatActivity implements MainContract.View {
     //Метод, який покаже головну сторінку
     public void showMainFragment() {
         toolbar.setTitle("Головний екран");
-        addFragment(new ContactsList());
+        addFragment(new ContactsListFragment());
     }
 
     //Метод, який показує екран для додавання контактів
     public void showAddContact() {
-        replaceFragment(new AddContact());
+        replaceFragment(new AddContactFragment());
     }
 
     //Метод, який показує фрагмет редагування екрану
-    public void showEditContactFragment (PhoneContact contact) {
-        EditContact editFragment = new EditContact();
-        Bundle args = new Bundle();
-        args.putSerializable("contact", contact);
-        editFragment.setArguments(args);
+    public void goToEditActivity (PhoneContact contact) {
 
-        replaceFragment(editFragment);
     }
 
 

@@ -1,21 +1,23 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.sign_up_by_email;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.presenter;
 
 
 
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.AppDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.UserDao;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
-import com.pllug.course.ivankiv.recruitmenthelper.utils.CircularTransformation;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.contract.SignUpByEmailContract;
+
+import com.pllug.course.ivankiv.recruitmenthelper.utils.CircularTransformationUtil;
 import com.squareup.picasso.Picasso;
 
-class Presenter implements Contract.Presenter {
-    private Contract.View view;
+public class SignUpByEmailPresenter implements SignUpByEmailContract.Presenter {
+    private SignUpByEmailContract.View view;
     private User user;
     private AppDatabase db;
     private UserDao userDao;
 
 
-    public Presenter(Contract.View view, AppDatabase db) {
+    public SignUpByEmailPresenter(SignUpByEmailContract.View view, AppDatabase db) {
         this.view = view;
         this.db = db;
         userDao = db.userDao();
@@ -27,7 +29,7 @@ class Presenter implements Contract.Presenter {
         //Показуємо зображення
         Picasso.with(view.getContext())
                 .load(view.getImageUri())
-                .transform(new CircularTransformation(600))
+                .transform(new CircularTransformationUtil(600))
                 .into(view.getImageView());
     }
 

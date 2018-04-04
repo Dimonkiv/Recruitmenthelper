@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.sign_up_by_email;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.contract;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 
 
-interface Contract {
+public interface SignUpByEmailContract {
     interface View {
 
         Uri getImageUri();

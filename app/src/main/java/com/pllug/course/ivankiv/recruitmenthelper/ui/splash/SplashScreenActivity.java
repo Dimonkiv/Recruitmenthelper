@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.activity;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.splash;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.activity.SignInActivity;
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     private ImageView logo;
     private TextView text;
@@ -37,9 +38,9 @@ public class SplashScreen extends AppCompatActivity {
         text.startAnimation(splashAnim);
     }
 
-    //Потік, який після виконання відкриває актівіті SignIn
+    //Потік, який після виконання відкриває актівіті SignInActivity
     private void goToNextActivity() {
-        final Intent intent = new Intent(this, SignIn.class);
+        final Intent intent = new Intent(this, SignInActivity.class);
         Thread timer = new Thread() {
             public void run() {
                 try {

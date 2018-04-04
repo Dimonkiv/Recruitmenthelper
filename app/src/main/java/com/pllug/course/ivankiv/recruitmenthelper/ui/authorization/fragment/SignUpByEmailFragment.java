@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.sign_up_by_email;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,11 +23,12 @@ import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.AppDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.InitDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.activity.SignIn;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.activity.SignInActivity;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.contract.SignUpByEmailContract;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.presenter.SignUpByEmailPresenter;
 
 
-
-public class SignUpByEmail extends Fragment implements Contract.View {
+public class SignUpByEmailFragment extends Fragment implements SignUpByEmailContract.View {
     private View root;
     private Toolbar toolbar;
     private ImageView photo;
@@ -35,7 +36,7 @@ public class SignUpByEmail extends Fragment implements Contract.View {
     private EditText name, lastname, email, phone,
             password, reenterPasword;
     Uri imageUri;
-    private Presenter presenter;
+    private SignUpByEmailPresenter presenter;
     private final int PICK_IMAGE = 1;
     private AppDatabase database;
 
@@ -72,7 +73,7 @@ public class SignUpByEmail extends Fragment implements Contract.View {
 
     //Ініціалізація презентера
     private void initPresenter() {
-        presenter = new Presenter(this, database);
+        presenter = new SignUpByEmailPresenter(this, database);
     }
 
     //Обробник кліків
@@ -101,7 +102,7 @@ public class SignUpByEmail extends Fragment implements Contract.View {
     private void initToolbar() {
         //Вказуємо, що toolbar буде використовуватися,
         //як ActionBar
-        ((SignIn) getActivity()).setSupportActionBar(toolbar);
+        ((SignInActivity) getActivity()).setSupportActionBar(toolbar);
         toolbar.setTitle("Реєстрація через email");
         setHasOptionsMenu(true);
 
@@ -111,7 +112,7 @@ public class SignUpByEmail extends Fragment implements Contract.View {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((SignIn) getActivity()).showSignUp();
+                ((SignInActivity) getActivity()).showSignUp();
             }
         });
     }

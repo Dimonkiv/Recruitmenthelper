@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.activity;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.activity;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -7,11 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.activity.main.Main;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.SignUp;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.fragment.sign_up_by_email.SignUpByEmail;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.activity.MainActivity;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.fragment.SignUpFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.fragment.SignUpByEmailFragment;
 
-public class SignIn extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
 
     @Override
@@ -41,17 +41,17 @@ public class SignIn extends AppCompatActivity {
 
     //Метод, який відкриває sign_up fragment
     public void showSignUp() {
-        addFragment(new SignUp());
+        addFragment(new SignUpFragment());
     }
 
     //Метод, який відкриває sign_up_by_email_fragment
     public void showSignUpByEmail() {
-        replaceFragment(new SignUpByEmail());
+        replaceFragment(new SignUpByEmailFragment());
     }
 
     //Метод, який відкриває головне актівіті
     public void goToMainActivity() {
-        Intent intent = new Intent(this, Main.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

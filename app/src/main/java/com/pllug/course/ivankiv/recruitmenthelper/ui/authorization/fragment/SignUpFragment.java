@@ -1,6 +1,5 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.activity.SignIn;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.activity.SignInActivity;
 
-public class SignUp extends Fragment implements View.OnClickListener {
+public class SignUpFragment extends Fragment implements View.OnClickListener {
     private View root;
     private Button btn_email, goToMainActivity;
 
@@ -42,10 +41,10 @@ public class SignUp extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sign_up_btn_email:
-                ((SignIn)getActivity()).showSignUpByEmail();
+                ((SignInActivity)getActivity()).showSignUpByEmail();
                 break;
             case R.id.sign_up_btn_go_to_main_activity:
-                ((SignIn)getActivity()).goToMainActivity();
+                ((SignInActivity)getActivity()).goToMainActivity();
         }
     }
 }

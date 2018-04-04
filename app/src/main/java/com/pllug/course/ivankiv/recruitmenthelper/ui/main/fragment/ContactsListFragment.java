@@ -1,4 +1,4 @@
-package com.pllug.course.ivankiv.recruitmenthelper.ui.fragment;
+package com.pllug.course.ivankiv.recruitmenthelper.ui.main.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 
-public class ContactsList extends Fragment {
+public class ContactsListFragment extends Fragment {
     private View root;
 
     @Nullable
