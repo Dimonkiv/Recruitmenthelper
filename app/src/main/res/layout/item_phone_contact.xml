@@ -2,46 +2,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_white_with_shadow">
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <ImageView
+    android:background="@drawable/background_white_with_shadow"
+    android:padding="15dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/item_add_contact_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/man"
-        android:layout_margin="10dp"/>
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:src="@drawable/man" />
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="5dp">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/item_add_contact_image"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/item_add_contact_name"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Dima Ivankiv"
             android:textColor="@color/primaryText"
             android:textSize="22sp"
-            android:layout_marginTop="10dp"/>
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/item_add_contact_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+380954608015"/>
+            android:text="+380954608015"
+            android:textColor="@color/primaryText"
+            android:textSize="17sp"/>
     </LinearLayout>
-</LinearLayout>
+
     <ImageButton
-        android:id="@+id/item_add_contact_add"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:background="@android:color/transparent"
+        android:id="@+id/item_add_contact_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
-        android:src="@drawable/add_button"/>
+        android:background="@android:color/transparent"
+        android:src="@drawable/button_add" />
 
 
 </RelativeLayout>

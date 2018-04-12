@@ -21,5 +21,17 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="linkedin_profile">LinkedIn профіль</string>
+    <string name="edit_contact">Редагування контакту</string>
+    <string name="trainee">Trainee</string>
+    <string name="junior">Junior</string>
+    <string name="middle">Middle</string>
+    <string name="senior">Senior</string>
+    <string name="experience">Досвід роботи</string>
+    <string name="advantages">Переваги</string>
+    <string name="disadvantages">Недоліки</string>
+    <string name="notes">Замітка</string>
+    <string name="job_or_university">Mісце робити чи навчання</string>
+    <string name="languages">Іноземні мови</string>
+    <string name="skills">Навички</string>
 
 </resources>
