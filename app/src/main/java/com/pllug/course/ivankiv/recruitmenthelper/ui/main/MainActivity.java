@@ -15,10 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.WorkWithFragment;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.addcontact.AddContactFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.contactlist.ContactListFragment;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends AppCompatActivity implements MainContract.View, WorkWithFragment {
@@ -28,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private NavigationView navigationView;
     private MainPresenter presenter;
     private TextView name, lastname, email;
-    private ImageView userAvatar;
+    private CircleImageView userAvatar;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
 
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         initToolbar();
         initNavigationDrawer();
         initMDrawerToggle();
+        showContactList();
     }
 
     //Initialization View
@@ -99,9 +104,21 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         userAvatar = header.findViewById(R.id.header_avatar);
 
         //Show data from db
-        name.setText(user.getName());
-        lastname.setText(user.getLastname());
-        email.setText(user.getEmail());
+        if (user.getName() != null) {
+            name.setText(user.getName());
+        }
+        if (user.getLastname() != null) {
+            lastname.setText(user.getLastname());
+        }
+        if (user.getEmail() != null) {
+            email.setText(user.getEmail());
+        }
+
+       if (user.getImageUri() != null) {
+            Glide.with(this)
+                    .load(user.getImageUri())
+                    .into(userAvatar);
+        }
 
     }
 
@@ -123,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 Toast.makeText(this, "my page", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.navigation_drawer_main_screen:
-
+                showContactList();
                 break;
             case R.id.navigation_drawer_import_linkedin:
 
@@ -147,7 +164,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     //Method which show AddContactFragment
     public void showAddContact() {
-        addFragment(new AddContactFragment());
+        replaceFragment(new AddContactFragment());
+    }
+
+    //Method which show ContactListFragment
+    public void showContactList() {
+        toolbar.setTitle("Головний екран");
+        addFragment(new ContactListFragment());
     }
 
     @Override

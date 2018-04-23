@@ -22,7 +22,8 @@
         </activity>
         <activity android:name=".ui.authorization.AuthorizationActivity" />
         <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.main.editcontact.EditContactActivity"></activity>
+        <activity android:name=".ui.main.editcontact.EditContactActivity" />
+        <activity android:name=".ui.secondary.SecondaryActivity"></activity>
     </application>
 
 </manifest>

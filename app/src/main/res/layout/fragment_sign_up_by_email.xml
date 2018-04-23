@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:background="@android:color/transparent"
             android:src="@drawable/icon_photo" />
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/sign_up_by_email_photo"
             android:layout_width="150dp"
             android:layout_height="150dp"

@@ -2,13 +2,12 @@ package com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.signup.byema
 
 
 
+import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.AppDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.InitDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.UserDao;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 
-import com.pllug.course.ivankiv.recruitmenthelper.utils.CircularTransformationUtil;
-import com.squareup.picasso.Picasso;
 
 public class SignUpByEmailPresenter implements SignUpByEmailContract.Presenter {
     private SignUpByEmailContract.View view;
@@ -32,9 +31,9 @@ public class SignUpByEmailPresenter implements SignUpByEmailContract.Presenter {
     //Show photo
     @Override
     public void showPhoto() {
-        Picasso.with(view.getContext())
+        Glide.with(view.getContext())
+                .asBitmap()
                 .load(view.getImageUri())
-                .transform(new CircularTransformationUtil(600))
                 .into(view.getImageView());
     }
 

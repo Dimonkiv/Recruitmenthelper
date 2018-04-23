@@ -1,15 +1,71 @@
 package com.pllug.course.ivankiv.recruitmenthelper.data.model;
 
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity
 public class Contact implements Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
     private String name;
 
     private String phone;
 
+    private String email;
+
+    private String linkedInLink;
+
+    private String dateOfLatestContact;
+
     private String photoUri;
 
+    private long recruiterNotesId;
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLinkedInLink() {
+        return linkedInLink;
+    }
+
+    public void setLinkedInLink(String linkedInLink) {
+        this.linkedInLink = linkedInLink;
+    }
+
+    public String getDateOfLatestContact() {
+        return dateOfLatestContact;
+    }
+
+    public void setDateOfLatestContact(String dateOfLatestContact) {
+        this.dateOfLatestContact = dateOfLatestContact;
+    }
+
+    public long getRecruiterNotesId() {
+        return recruiterNotesId;
+    }
+
+    public void setRecruiterNotesId(long recruiterNotesId) {
+        this.recruiterNotesId = recruiterNotesId;
+    }
 
     public String getName() {
         return name;

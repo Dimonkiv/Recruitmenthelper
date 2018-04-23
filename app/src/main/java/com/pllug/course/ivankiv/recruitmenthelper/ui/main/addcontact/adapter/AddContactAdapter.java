@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.main.editcontact.EditContactActivity;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.SecondaryActivity;
 
 import java.util.List;
 
@@ -65,7 +65,8 @@ public class AddContactAdapter extends RecyclerView.Adapter<AddContactAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(mContext, " - " + getItemId(position), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(mContext, EditContactActivity.class);
+                    Intent intent = new Intent(mContext, SecondaryActivity.class);
+                    intent.putExtra("addContactFragment", "addContactFragment");
                     intent.putExtra("contact", contacts.get(position));
                     mContext.startActivity(intent);
                 }
@@ -73,19 +74,20 @@ public class AddContactAdapter extends RecyclerView.Adapter<AddContactAdapter.Vi
         }
     }
 
+
     @Override
     public int getItemCount() {
         return contacts.size();
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+     class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
         TextView name, phone;
         ImageButton button;
 
-        public ViewHolder(View item) {
+         ViewHolder(View item) {
             super(item);
             image = item.findViewById(R.id.item_add_contact_image);
             name = item.findViewById(R.id.item_add_contact_name);

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.main.editcontact.EditContactActivity">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/edit_contact_toolbar"
@@ -40,6 +38,27 @@
                     android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:background="@drawable/button_circle" />
+
+                <RelativeLayout
+                    android:id="@+id/edit_contact_image_pen"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignBottom="@+id/edit_contact_photo"
+                    android:layout_alignRight="@+id/edit_contact_photo"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/circle_red" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/icon_pen_green" />
+                </RelativeLayout>
+
             </RelativeLayout>
 
             <LinearLayout
@@ -120,38 +139,79 @@
 
                 </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/edit_contact_job_or_university"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/icon_build"
-                    android:hint="@string/job_or_university"
-                    android:inputType="text" />
-
-                <TextView
++                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="Професія:"
-                    android:textColor="@color/secondaryText"
-                    android:textSize="18sp" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/secondaryText" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                <Spinner
+                        <TextView
+                            android:id="@+id/edit_contact_student_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:text="Студент"
+                            android:textColor="@color/primaryText"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/edit_contact_developer_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:text="Розробник"
+                            android:textColor="@color/primaryText"
+                            android:textSize="17sp" />
+
+
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/edit_contact_person_type_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/edit_contact_student_r_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1" />
+
+                        <RadioButton
+                            android:id="@+id/edit_contact_developer_r_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1" />
+
+                    </RadioGroup>
+                </LinearLayout>
+
+                <EditText
                     android:id="@+id/edit_contact_profession"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp" />
+                    android:drawableLeft="@drawable/icon_experience"
+                    android:hint="Професія"
+                    android:inputType="text" />
 
                 <LinearLayout
+                    android:id="@+id/edit_contact_position_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -163,7 +223,7 @@
                             android:id="@+id/edit_contact_trainee_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
+                            android:layout_marginLeft="5dp"
                             android:layout_weight="1"
                             android:text="@string/trainee"
                             android:textColor="@color/primaryText"
@@ -173,7 +233,7 @@
                             android:id="@+id/edit_contact_junior_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
+                            android:layout_marginLeft="5dp"
                             android:layout_weight="1"
                             android:text="@string/junior"
                             android:textColor="@color/primaryText"
@@ -183,7 +243,7 @@
                             android:id="@+id/edit_contact_middle_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
+                            android:layout_marginLeft="5dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
                             android:text="@string/middle"
@@ -194,17 +254,18 @@
                             android:id="@+id/edit_contact_senior_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
+                            android:layout_marginLeft="5dp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
                             android:text="@string/senior"
                             android:textColor="@color/primaryText"
                             android:textSize="17sp" />
 
+
                     </LinearLayout>
 
                     <RadioGroup
-                        android:id="@+id/edit_contact_position"
+                        android:id="@+id/edit_contact_position_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -240,6 +301,22 @@
                     </RadioGroup>
                 </LinearLayout>
 
+                <EditText
+                    android:id="@+id/edit_contact_experience"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/icon_experience"
+                    android:hint="@string/experience"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/edit_contact_job_or_university"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/icon_build"
+                    android:hint="@string/job_or_university"
+                    android:inputType="text" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -260,14 +337,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp" />
-
-                <EditText
-                    android:id="@+id/edit_contact_experience"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/icon_experience"
-                    android:hint="@string/experience"
-                    android:inputType="text" />
 
                 <EditText
                     android:id="@+id/edit_contact_advantages"
@@ -317,6 +386,10 @@
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/icon_language"
                         android:inputType="text" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/edit_contact_language_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
                     <ImageButton
                         android:id="@+id/edit_contact_add_language"
