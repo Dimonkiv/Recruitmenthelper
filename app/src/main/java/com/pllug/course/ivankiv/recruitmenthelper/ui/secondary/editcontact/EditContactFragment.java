@@ -135,7 +135,7 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
         middleRBtn = root.findViewById(R.id.edit_contact_middle_r_btn);
         seniorRBtn = root.findViewById(R.id.edit_contact_senior_r_btn);
         studentRBtn = root.findViewById(R.id.edit_contact_student_r_btn);
-        workRBtn = root.findViewById(R.id.edit_contact_developer_r_btn);
+        workRBtn = root.findViewById(R.id.edit_contact_worker_r_btn);
 
         image_pen = root.findViewById(R.id.edit_contact_image_pen);
 
@@ -224,136 +224,12 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
 
     //Method, which set data about contact from db
     private void showContactDataFromDB() {
-        Contact contact = presenter.getContact(id);
 
-        if (contact.getPhotoUri() != null) {
-            photoUri = contact.getPhotoUri();
-            Glide.with(this)
-                    .asBitmap()
-                    .load(photoUri)
-                    .into(photo);
-            showImagePen();
-
-        }
-
-        if (contact.getName() != null) {
-            name.setText(contact.getName());
-        }
-
-        if (contact.getPhone() != null) {
-            phone.setText(contact.getPhone());
-        }
-
-        if (contact.getEmail() != null) {
-            email.setText(contact.getName());
-        }
-
-        if (contact.getLinkedInLink() != null) {
-            linkedIn.setText(contact.getLinkedInLink());
-        }
-
-        if (contact.getDateOfLatestContact() != null) {
-            date.setText(contact.getDateOfLatestContact());
-        }
     }
 
     //Method, which set data about recruiterNotes from db
     private void showRecruiterNotesData() {
-        //get recruiter notes from presenter
-        RecruiterNotes recruiterNotes = presenter.getRecruiterNote(recruiterNotesId);
 
-
-        if (recruiterNotes.getTypeOfEmployment() != null) {
-            String typeOfEmployment = recruiterNotes.getTypeOfEmployment();
-            boolean isStudentRBtnChecked = false;
-
-            //if typeOfEmployment is
-            if (typeOfEmployment.equals("student")) {
-                studentRBtn.setChecked(true);
-                isStudentRBtnChecked = true;
-            } else if (typeOfEmployment.equals("work")) {
-                workRBtn.setChecked(true);
-                isStudentRBtnChecked = true;
-            }
-
-            if (!isStudentRBtnChecked) {
-                if (recruiterNotes.getProfession() != null) {
-                    profession.setText(recruiterNotes.getProfession());
-                }
-
-                if (recruiterNotes.getPosition() != null) {
-                    switch (recruiterNotes.getPosition()) {
-                        case "trainee":
-                            traineeRBtn.setChecked(true);
-                            break;
-                        case "junior":
-                            juniorRBtn.setChecked(true);
-                            break;
-                        case "middle":
-                            middleRBtn.setChecked(true);
-                            break;
-                        case "senior":
-                            seniorRBtn.setChecked(true);
-                            break;
-                    }
-                }
-
-                if (recruiterNotes.getExperience() != null) {
-                    experience.setText(recruiterNotes.getExperience());
-                }
-            }
-        }
-
-        if (recruiterNotes.getJobOrUniversity() != null) {
-            jobOrUniversity.setText(recruiterNotes.getExperience());
-        }
-
-        if (recruiterNotes.getWorkInterests() != null) {
-            Integer position = null;
-
-            switch (recruiterNotes.getWorkInterests()) {
-                case "Працює":
-                    position = 1;
-                    break;
-                case "Шукає роботу":
-                    position = 2;
-                    break;
-                case "Зацікавлений в нових можливостях":
-                    position = 3;
-                    break;
-            }
-
-            if (position != null) {
-                final Integer finalPosition = position;
-                jobInterest.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        jobInterest.setSelection(finalPosition);
-                    }
-                });
-            }
-
-        }
-
-        if (recruiterNotes.getAdvantages() != null) {
-            advantages.setText(recruiterNotes.getAdvantages());
-        }
-
-        if (recruiterNotes.getDisadvantages() != null) {
-            disadvanteges.setText(recruiterNotes.getDisadvantages());
-        }
-
-        if (recruiterNotes.getNotes() != null) {
-            notes.setText(recruiterNotes.getNotes());
-        }
-
-        if (recruiterNotes.getLanguage() != null) {
-            language.setText(recruiterNotes.getLanguage());
-        }
-
-        if (recruiterNotes.getSkill() != null) {
-            skill.setText(recruiterNotes.getSkill());
-        }
     }
 
 
@@ -497,7 +373,7 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
             case R.id.edit_contact_student_r_btn:
                 hideDeveloperFields();
                 break;
-            case R.id.edit_contact_developer_r_btn:
+            case R.id.edit_contact_worker_r_btn:
                 showDeveloperFields();
                 break;
         }

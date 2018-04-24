@@ -9,7 +9,6 @@ public class RecruiterNotes {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    private String typeOfEmployment;
 
     private String profession;
 
@@ -40,13 +39,6 @@ public class RecruiterNotes {
         this.id = id;
     }
 
-    public String getTypeOfEmployment() {
-        return typeOfEmployment;
-    }
-
-    public void setTypeOfEmployment(String typeOfEmployment) {
-        this.typeOfEmployment = typeOfEmployment;
-    }
 
     public String getProfession() {
         return profession;
