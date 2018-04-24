@@ -71,7 +71,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     Intent intent = new Intent(mContext, SecondaryActivity.class);
                     intent.putExtra("id", contactItem.getId());
                     intent.putExtra("recruiterNotesId", contactItem.getRecruiterNotesId());
-                    intent.putExtra("contactList", "contactList");
+                    intent.putExtra("fragmentName", "ContactList");
                     mContext.startActivity(intent);
                 }
             });
@@ -82,7 +82,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(mContext, SecondaryActivity.class);
-                    intent.putExtra("ContactListActivity", "ContactListActivity");
+                    intent.putExtra("fragmentName", "ContactListEditBtn");
+                    intent.putExtra("id", contactItem.getId());
+                    intent.putExtra("recruiterNotesId", contactItem.getRecruiterNotesId());
                     mContext.startActivity(intent);
                 }
             });

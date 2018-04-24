@@ -13,6 +13,10 @@ interface EditContactContract {
 
     interface Presenter {
 
+        Contact getContact(long id);
+
+        RecruiterNotes getRecruiterNote(long recruiterNotesId);
+
         boolean checkedEnteredData();
     }
 

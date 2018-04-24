@@ -163,12 +163,12 @@
                             android:textSize="17sp" />
 
                         <TextView
-                            android:id="@+id/edit_contact_developer_txt"
+                            android:id="@+id/edit_contact_worker_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="1"
-                            android:text="Розробник"
+                            android:text="Працює"
                             android:textColor="@color/primaryText"
                             android:textSize="17sp" />
 
@@ -176,7 +176,7 @@
                     </LinearLayout>
 
                     <RadioGroup
-                        android:id="@+id/edit_contact_person_type_group"
+                        android:id="@+id/edit_contact_type_of_employment_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -189,7 +189,7 @@
                             android:layout_weight="1" />
 
                         <RadioButton
-                            android:id="@+id/edit_contact_developer_r_btn"
+                            android:id="@+id/edit_contact_worker_r_btn"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"

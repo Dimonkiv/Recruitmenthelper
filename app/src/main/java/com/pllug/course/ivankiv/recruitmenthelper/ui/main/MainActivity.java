@@ -1,5 +1,6 @@
 package com.pllug.course.ivankiv.recruitmenthelper.ui.main;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         initToolbar();
         initNavigationDrawer();
         initMDrawerToggle();
-        showContactList();
+        showFragment();
     }
 
     //Initialization View
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 Toast.makeText(this, "my page", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.navigation_drawer_main_screen:
-                showContactList();
+                showContactListFragment();
                 break;
             case R.id.navigation_drawer_import_linkedin:
 
@@ -164,11 +165,27 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     //Method which show AddContactFragment
     public void showAddContact() {
-        replaceFragment(new AddContactFragment());
+        addFragment(new AddContactFragment());
     }
 
+    //Method, which show fragment
+    private void showFragment() {
+        Intent intent = getIntent();
+
+        if (intent != null && intent.getStringExtra("fragmentName") != null) {
+            String fragmentName = intent.getStringExtra("fragmentName");
+
+            if (fragmentName.equals("AddContactFragment")) {
+                showAddContact();
+            } else if (fragmentName.equals("ContactListEditBtn")) {
+                showContactListFragment();
+            }
+        } else {
+            showContactListFragment();
+        }
+    }
     //Method which show ContactListFragment
-    public void showContactList() {
+    public void showContactListFragment() {
         toolbar.setTitle("Головний екран");
         addFragment(new ContactListFragment());
     }

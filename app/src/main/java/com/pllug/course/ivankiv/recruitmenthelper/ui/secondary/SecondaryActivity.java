@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.WorkWithFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.MainActivity;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.detailconatct.DetailContactFragment;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.EditContactFragment;
 
@@ -25,51 +26,89 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
 
     }
 
+    //Method, which get intentExtra from MainActivity and show correspondence fragment
     private void showFragment() {
+        //get intent
         Intent intent = getIntent();
 
-        if (intent != null) {
-            if (intent.getStringExtra("contactList") != null) {
-                if (intent.getStringExtra("contactList").equals("contactList")) {
-                    long id = intent.getLongExtra("id", 1);
-                    long recruitNotesId = intent.getLongExtra("recruiterNotesId", 1);
-                    showDetailContactFragment(id, recruitNotesId);
-                }
-            } else if (intent.getStringExtra("addContactFragment") != null) {
-                if (intent.getStringExtra("addContactFragment").equals("addContactFragment")) {
-                    Contact contact = (Contact) intent.getSerializableExtra("contact");
-                    showEditContactFragment(contact);
-                }
-            } else if (intent.getStringExtra("ContactListActivity") != null) {
-                if (intent.getStringExtra("ContactListActivity").equals("ContactListActivity")) {
-                    showEditContactFragment();
-                }
+        //checking intent and stringExtra on null
+        if (intent != null && intent.getStringExtra("fragmentName") != null) {
+            String fragmentName = intent.getStringExtra("fragmentName");
+
+            //if data was getting from AddContactFragment
+            if (fragmentName.equals("AddContactFragment")) {
+                Contact contact = (Contact)intent.getSerializableExtra("contact");
+
+                showEditContactFragment(contact, fragmentName);
+            }
+            //if data was getting from ContactListFragment with clicked on edit button
+            else if (fragmentName.equals("ContactListEditBtn")) {
+                long id = intent.getLongExtra("id", 0);
+                long recruiterNotesId = intent.getLongExtra("recruiterNotesId", 0);
+
+                showEditContactFragment(id, recruiterNotesId, fragmentName);
+            }
+            //if data was getting from ContactListFragment
+            else if (fragmentName.equals("ContactList")) {
+                long id = intent.getLongExtra("id", 0);
+                long recruiterNotesId = intent.getLongExtra("recruiterNotesId", 0);
+
+                showDetailContactFragment(id, recruiterNotesId, fragmentName);
             }
         }
     }
 
+    //Method, which show EditContactFragment with parameters Contact and fragmentName
+    private void showEditContactFragment(Contact contact, String fragmentName) {
+        EditContactFragment fragment = new EditContactFragment();
 
-    public void showDetailContactFragment(long id, long recruitNotesId) {
-        DetailContactFragment detailContactFragment = new DetailContactFragment();
-        Bundle args = new Bundle();
-        args.putLong("id", id);
-        args.putLong("recruitNotesId", recruitNotesId);
-        detailContactFragment.setArguments(args);
-        addFragment(detailContactFragment);
-
-    }
-
-    public void showEditContactFragment(Contact contact) {
-        EditContactFragment editContactFragment = new EditContactFragment();
         Bundle args = new Bundle();
         args.putSerializable("contact", contact);
-        editContactFragment.setArguments(args);
-        addFragment(editContactFragment);
+        args.putString("fragmentName", fragmentName);
+        fragment.setArguments(args);
+
+        addFragment(fragment);
     }
-    public void showEditContactFragment() {
-        EditContactFragment editContactFragment = new EditContactFragment();
-        addFragment(editContactFragment);
+
+    //Method, which show EditContactFragment with parameters id, recruiterNotesId and fragmentName
+    private void showEditContactFragment(long id, long recruiterNotesId, String fragmentName) {
+        EditContactFragment fragment = new EditContactFragment();
+
+        Bundle args = new Bundle();
+        args.putLong("id", id);
+        args.putLong("recruiterNotesId", recruiterNotesId);
+        args.putString("fragmentName", fragmentName);
+        fragment.setArguments(args);
+
+        addFragment(fragment);
     }
+
+    //Method, which show DetailContactFragment with parameters id, recruiterNotesId and fragmentName
+    private void showDetailContactFragment(long id, long recruiterNotesId, String fragmentName) {
+        DetailContactFragment fragment = new DetailContactFragment();
+
+        Bundle args = new Bundle();
+        args.putLong("id", id);
+        args.putLong("recruiterNotesId", recruiterNotesId);
+        args.putString("fragmentName", fragmentName);
+        fragment.setArguments(args);
+
+        addFragment(fragment);
+    }
+
+    //Method, which show DetailContactFragment without parameters
+    public void showDetailContactFragment() {
+        addFragment(new DetailContactFragment());
+    }
+
+    //Method, which go to MainActivity and passes him fragmentName
+    public void goToMainActivity(String fragmentName) {
+        Intent intent = new Intent(this, MainActivity.class);
+
+        intent.putExtra("fragmentName", fragmentName);
+        startActivity(intent);
+    }
+
 
     @Override
     public void addFragment(Fragment fragment) {

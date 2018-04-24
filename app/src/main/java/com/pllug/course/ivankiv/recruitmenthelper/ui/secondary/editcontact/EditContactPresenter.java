@@ -27,6 +27,16 @@ public class EditContactPresenter implements EditContactContract.Presenter {
     }
 
     @Override
+    public Contact getContact(long id) {
+        return contactDao.getById(id);
+    }
+
+    @Override
+    public RecruiterNotes getRecruiterNote(long recruiterNotesId) {
+        return recruiterNotesDao.getById(recruiterNotesId);
+    }
+
+    @Override
     public boolean checkedEnteredData() {
         Contact contact = view.getContact();
         RecruiterNotes recruiterNotes = view.getRecruiterNotes();

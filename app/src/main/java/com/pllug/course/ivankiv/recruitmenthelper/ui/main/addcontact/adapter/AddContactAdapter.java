@@ -66,7 +66,7 @@ public class AddContactAdapter extends RecyclerView.Adapter<AddContactAdapter.Vi
                 public void onClick(View view) {
                     Toast.makeText(mContext, " - " + getItemId(position), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(mContext, SecondaryActivity.class);
-                    intent.putExtra("addContactFragment", "addContactFragment");
+                    intent.putExtra("fragmentName", "AddContactFragment");
                     intent.putExtra("contact", contacts.get(position));
                     mContext.startActivity(intent);
                 }
