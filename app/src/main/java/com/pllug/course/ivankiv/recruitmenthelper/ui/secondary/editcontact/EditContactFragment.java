@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,34 +31,46 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.RecruiterNotes;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.MainActivity;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.SecondaryActivity;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.adapter.LanguageEditTextAdapter;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.adapter.SkillAdapter;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.datepicker.DatePickerFragment;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditContactFragment extends Fragment implements View.OnClickListener, EditContactContract.View {
     private View root;
+
     private Contact contact;
 
     private Toolbar toolbar;
     private CircleImageView photo;
-    private ImageButton loadPhoto, dateButton;
+    private ImageButton loadPhoto, dateButton, addLanguage, addSkill;
     private RelativeLayout image_pen;
-    private LinearLayout position_container;
+    private LinearLayout experience_container;
+
     private Spinner jobInterest;
     private TextView date;
-    private RadioGroup position_group, type_of_employment_group;
-    private RadioButton traineeRBtn, juniorRBtn, middleRBtn, seniorRBtn, studentRBtn, workRBtn;
-    private EditText name, phone, email, linkedIn, jobOrUniversity,
-            experience, profession, advantages, disadvanteges, notes, skill, language;
+    private RecyclerView languageRecycler, skillRecycler;
+    private RadioGroup experience_group, type_of_employment_group;
+    private RadioButton traineeRBtn, juniorRBtn, middleRBtn, seniorRBtn, techLeadRBtn, studentRBtn, workRBtn;
+    private EditText name, phone, email, linkedIn, jobOrUniversity, profession, advantages, disadvanteges, notes;
 
     private DatePickerDialog.OnDateSetListener onDatelistener;
     private EditContactPresenter presenter;
-    private String photoUri, positionStr, fragmentName;
+
+    private LanguageEditTextAdapter languageEditTextAdapter;
+    private SkillAdapter skillAdapter;
+
+    private String photoUri, experienceStr, fragmentName, typeOfEmploymentStr;
     private Long id, recruiterNotesId;
 
     private final int PICK_IMAGE = 1;
@@ -68,6 +82,8 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
         getDataFromActivity();
         initView();
         initPresenter();
+        initLanguageAdapter();
+        initSkillAdapter();
         initListener();
         initToolbar();
         initDateListener();
@@ -87,11 +103,16 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
             //get fragmentName from SecondaryActivity
             fragmentName = bundle.getString("fragmentName");
 
-            //if data was getting from AddContactFragment
-            if (fragmentName.equals("AddContactFragment")) {
+            //if data was getting from PhoneContactFragment
+            if (fragmentName.equals("PhoneContactFragment")) {
                 contact = (Contact) bundle.getSerializable("contact");
             } //if data was getting from ContactListFragment
             else if (fragmentName.equals("ContactListEditBtn")) {
+                id = bundle.getLong("id");
+                recruiterNotesId = bundle.getLong("recruiterNotesId");
+            }
+            //else if data was getting from DetailContactFragment
+            else if (fragmentName.equals("DetailContact")) {
                 id = bundle.getLong("id");
                 recruiterNotesId = bundle.getLong("recruiterNotesId");
             }
@@ -100,7 +121,6 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
 
     //Initialization View
     private void initView() {
-        position_container = root.findViewById(R.id.edit_contact_position_container);
 
         toolbar = root.findViewById(R.id.edit_contact_toolbar);
 
@@ -115,35 +135,103 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
         email = root.findViewById(R.id.edit_contact_email);
         linkedIn = root.findViewById(R.id.edit_contact_linkedin);
         jobOrUniversity = root.findViewById(R.id.edit_contact_job_or_university);
-        experience = root.findViewById(R.id.edit_contact_experience);
         advantages = root.findViewById(R.id.edit_contact_advantages);
         disadvanteges = root.findViewById(R.id.edit_contact_disadvantages);
         notes = root.findViewById(R.id.edit_contact_notes);
-        language = root.findViewById(R.id.edit_contact_language);
-        skill = root.findViewById(R.id.edit_contact_skill);
 
+
+        languageRecycler = root.findViewById(R.id.edit_contact_language_container);
+        addLanguage = root.findViewById(R.id.edit_contact_add_language);
+
+        skillRecycler = root.findViewById(R.id.edit_contact_skills_container);
+        addSkill = root.findViewById(R.id.edit_contact_add_skill);
 
         profession = root.findViewById(R.id.edit_contact_profession);
         jobInterest = root.findViewById(R.id.edit_contact_job_interest);
 
 
-        position_group = root.findViewById(R.id.edit_contact_position);
+        experience_group = root.findViewById(R.id.edit_contact_experience_group);
         type_of_employment_group = root.findViewById(R.id.edit_contact_type_of_employment_group);
 
         traineeRBtn = root.findViewById(R.id.edit_contact_trainee_r_btn);
         juniorRBtn = root.findViewById(R.id.edit_contact_junior_r_btn);
         middleRBtn = root.findViewById(R.id.edit_contact_middle_r_btn);
         seniorRBtn = root.findViewById(R.id.edit_contact_senior_r_btn);
+        techLeadRBtn = root.findViewById(R.id.edit_contact_tech_lead_r_btn);
         studentRBtn = root.findViewById(R.id.edit_contact_student_r_btn);
         workRBtn = root.findViewById(R.id.edit_contact_worker_r_btn);
 
         image_pen = root.findViewById(R.id.edit_contact_image_pen);
+        experience_container = root.findViewById(R.id.edit_contact_experience_container);
 
     }
 
     //Initialization presenter
     private void initPresenter() {
         presenter = new EditContactPresenter(this);
+    }
+
+    //Initialization language adapter
+    private void initLanguageAdapter() {
+        languageEditTextAdapter = new LanguageEditTextAdapter(getActivity());
+        languageRecycler.setAdapter(languageEditTextAdapter);
+        languageRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        addLanguageField();
+    }
+
+    //Method, which add editText for entering language, spinner for choosing language level
+    // and imageButton for removing this fields, to languageRecyclerView
+    private void addLanguageField() {
+        languageEditTextAdapter.addLanguage();
+        languageEditTextAdapter.notifyItemInserted(languageEditTextAdapter.getItemCount() - 1);
+    }
+
+    //Method, which save all data from language fields in languages and languageLevels(ArrayList)
+    private List<Language> getLanguageData() {
+        List<Language> languages = new ArrayList<>();
+
+        for (LanguageEditTextAdapter.LanguageHolder holder : languageEditTextAdapter.languageHolders) {
+            Language language = new Language();
+            language.setLanguage(holder.editText.getText().toString());
+            language.setLanguageLevel(holder.languageLevel.getSelectedItem().toString());
+            if (fragmentName != null && !fragmentName.equals("PhoneContactFragment")) {
+                language.setRecruiterNotesId(recruiterNotesId);
+            }
+            languages.add(language);
+        }
+
+        return languages;
+    }
+
+    //Initialization skill adapter
+    private void initSkillAdapter() {
+        skillAdapter = new SkillAdapter();
+        skillRecycler.setAdapter(skillAdapter);
+        skillRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        addSkillField();
+    }
+
+    //Method, which add editText for entering skill and imageButton for removing this field
+    //to skillRecyclerView
+    private void addSkillField() {
+        skillAdapter.addSkill();
+        skillAdapter.notifyItemInserted(languageEditTextAdapter.getItemCount() - 1);
+    }
+
+    //Method, which save skills from skillFields into skills(ArrayList)
+    private List<Skill> getSkillData() {
+        List<Skill> skills = new ArrayList<>();
+
+        for (SkillAdapter.SkillHolder holder : skillAdapter.skillHolders) {
+            Skill skill = new Skill();
+            skill.setSkill(holder.skillEditText.getText().toString());
+            if (fragmentName != null && !fragmentName.equals("PhoneContactFragment")) {
+                skill.setRecruiterNotesId(recruiterNotesId);
+            }
+            skills.add(skill);
+        }
+
+        return skills;
     }
 
     //Initialization listener
@@ -154,14 +242,20 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
         juniorRBtn.setOnClickListener(this);
         middleRBtn.setOnClickListener(this);
         seniorRBtn.setOnClickListener(this);
+        techLeadRBtn.setOnClickListener(this);
         workRBtn.setOnClickListener(this);
         studentRBtn.setOnClickListener(this);
+        addLanguage.setOnClickListener(this);
+        addSkill.setOnClickListener(this);
+
     }
 
     //Initialization toolbar
     private void initToolbar() {
         ((SecondaryActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle(R.string.edit_contact);
+
+        //Set title
+        ((SecondaryActivity) getActivity()).getSupportActionBar().setTitle("Редагування контакту");
         setHasOptionsMenu(true);
 
         //Set back button
@@ -170,7 +264,7 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((SecondaryActivity) getActivity()).goToMainActivity(fragmentName);
+                openLastFragment();
             }
         });
     }
@@ -216,22 +310,149 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
         //then load data from DB and set their into edit fields
         else if (id != null && recruiterNotesId != null) {
             if (recruiterNotesId != 0 && id != 0) {
-                showContactDataFromDB();
-                showRecruiterNotesData();
+                setContactDataIntoFieldsFromDB();
+                setRecruiterNotesDataIntoFieldsFromDB();
+                setLanguageDataIntoFieldsFromDb();
+                setSkillDataIntoFieldsFromDB();
             }
         }
     }
 
     //Method, which set data about contact from db
-    private void showContactDataFromDB() {
+    private void setContactDataIntoFieldsFromDB() {
+        Contact contact = presenter.getContact(id);
+
+        if (contact.getPhotoUri() != null && !contact.getPhotoUri().isEmpty()) {
+            photoUri = contact.getPhotoUri();
+
+            Glide.with(getActivity())
+                    .load(photoUri)
+                    .into(photo);
+        }
+
+        if (contact.getName() != null && !contact.getName().isEmpty()) {
+            name.setText(contact.getName());
+        }
+
+        if (contact.getEmail() != null && !contact.getEmail().isEmpty()) {
+            email.setText(contact.getEmail());
+        }
+
+        if (contact.getPhone() != null && !contact.getPhone().isEmpty()) {
+            phone.setText(contact.getPhone());
+        }
+
+        if (contact.getLinkedInLink() != null && !contact.getLinkedInLink().isEmpty()) {
+            linkedIn.setText(contact.getLinkedInLink());
+        }
+
+        if (contact.getDateOfLatestContact() != null && !contact.getDateOfLatestContact().isEmpty()) {
+            date.setText(contact.getDateOfLatestContact());
+        }
+
+        if (contact.getLinkedInLink() != null && !contact.getLinkedInLink().isEmpty()) {
+            linkedIn.setText(contact.getLinkedInLink());
+        }
 
     }
 
     //Method, which set data about recruiterNotes from db
-    private void showRecruiterNotesData() {
+    private void setRecruiterNotesDataIntoFieldsFromDB() {
+        RecruiterNotes recruiterNotes = presenter.getRecruiterNote(recruiterNotesId);
 
+        //Set typeOfEmployment
+        if (recruiterNotes.getTypeOfEmployment() != null && !recruiterNotes.getTypeOfEmployment().isEmpty()) {
+
+            if (recruiterNotes.getTypeOfEmployment().equals("Студент")) {
+                studentRBtn.setChecked(true);
+                profession.setVisibility(View.GONE);
+                experience_container.setVisibility(View.GONE);
+            } else {
+
+                workRBtn.setChecked(true);
+                profession.setVisibility(View.VISIBLE);
+                experience_container.setVisibility(View.VISIBLE);
+
+                //Set profession
+                if (recruiterNotes.getProfession() != null && !recruiterNotes.getProfession().isEmpty()) {
+                    profession.setText(recruiterNotes.getProfession());
+                }
+
+                //Set experience
+                if (recruiterNotes.getExperience() != null && !recruiterNotes.getExperience().isEmpty()) {
+                    switch (recruiterNotes.getExperience()) {
+                        case "trainee":
+                            traineeRBtn.setChecked(true);
+                            break;
+                        case "junior":
+                            juniorRBtn.setChecked(true);
+                            break;
+                        case "middle":
+                            middleRBtn.setChecked(true);
+                            break;
+                        case "senior":
+                            seniorRBtn.setChecked(true);
+                            break;
+                        case "techLead":
+                            techLeadRBtn.setChecked(true);
+                            break;
+                    }
+                }
+            }
+        }
+
+        //Set jobOrUniversity
+        if (recruiterNotes.getJobOrUniversity() != null && !recruiterNotes.getJobOrUniversity().isEmpty()) {
+            jobOrUniversity.setText(recruiterNotes.getJobOrUniversity());
+        }
+
+        //Set jobInterest
+        if (recruiterNotes.getJobInterests() != null && !recruiterNotes.getJobInterests().isEmpty()) {
+            int pos = 1;
+
+            switch (recruiterNotes.getJobInterests()) {
+                case "Працює":
+                    pos = 1;
+                    break;
+                case "Шукає роботу":
+                    pos = 2;
+                    break;
+                case "Зацікавлений в нових можливостях":
+                    pos = 3;
+                    break;
+                default:
+                    pos = 2;
+                    break;
+            }
+
+            jobInterest.setSelection(pos);
+        }
+
+        //Set advantages
+        if (recruiterNotes.getAdvantages() != null && !recruiterNotes.getAdvantages().isEmpty()) {
+            advantages.setText(recruiterNotes.getAdvantages());
+        }
+
+        //Set disadvateges
+        if (recruiterNotes.getDisadvantages() != null && !recruiterNotes.getDisadvantages().isEmpty()) {
+            disadvanteges.setText(recruiterNotes.getDisadvantages());
+        }
+
+        //Set notes
+        if (recruiterNotes.getNotes() != null && !recruiterNotes.getNotes().isEmpty()) {
+            notes.setText(recruiterNotes.getNotes());
+        }
     }
 
+    //Method, which set language into language fields(recycler view)
+    private void setLanguageDataIntoFieldsFromDb() {
+        languageEditTextAdapter.addAllLanguages(presenter.getLanguages(recruiterNotesId));
+    }
+
+    //Method, which set skill into skill fields(recycler view)
+    private void setSkillDataIntoFieldsFromDB() {
+        skillAdapter.addAllSkill(presenter.getSkills(recruiterNotesId));
+    }
 
     //Method, which set data from telephone book into edit form
     private void setContactDataFromPhoneBook() {
@@ -277,24 +498,37 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
         startActivityForResult(photoPickerIntent, PICK_IMAGE);
     }
 
+    //Method, which show fragment which was before
+    private void openLastFragment() {
+        if (fragmentName.equals("DetailContact")) {
+            showDetailContactFragment();
+        } else {
+            openMainActivity();
+        }
+    }
+
+    //Method, which open DetailContactFragment
+    private void showDetailContactFragment() {
+        ((SecondaryActivity) getActivity()).showDetailContactFragment(id, recruiterNotesId, fragmentName);
+    }
+
     //Method, which open MainActivity
-    private void openActivity() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+    private void openMainActivity() {
+        ((SecondaryActivity) getActivity()).goToMainActivity(fragmentName);
     }
 
     //Method, which hide profession_edit_text, container for position radio button and experience_edit_text
     private void hideDeveloperFields() {
+        jobOrUniversity.setHint("Місце навчання");
         profession.setVisibility(View.GONE);
-        position_container.setVisibility(View.GONE);
-        experience.setVisibility(View.GONE);
+        experience_container.setVisibility(View.GONE);
     }
 
     //Method, which show profession_edit_text, container for position radio button and experience_edit_text
     private void showDeveloperFields() {
+        jobOrUniversity.setHint("Місце роботи");
         profession.setVisibility(View.VISIBLE);
-        position_container.setVisibility(View.VISIBLE);
-        experience.setVisibility(View.VISIBLE);
+        experience_container.setVisibility(View.VISIBLE);
     }
 
     //Method, which show DatePickerDialog
@@ -320,11 +554,9 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
     private void initDateListener() {
         onDatelistener = new DatePickerDialog.OnDateSetListener() {
 
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-
-                date.setText(String.valueOf(dayOfMonth) + " : " + String.valueOf(monthOfYear + 1)
-                        + " : " + String.valueOf(year));
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                date.setText(String.valueOf(dayOfMonth) + "." + String.valueOf(monthOfYear + 1)
+                        + "." + String.valueOf(year));
             }
         };
     }
@@ -340,9 +572,9 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sign_up_by_email_toolbar_send) {
-            if (presenter.checkedEnteredData()) {
+            if (presenter.checkedEnteredData(fragmentName)) {
                 Toast.makeText(getActivity(), "Send", Toast.LENGTH_SHORT).show();
-                openActivity();
+                openLastFragment();
             }
 
         }
@@ -359,22 +591,33 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
                 showGallery();
                 break;
             case R.id.edit_contact_trainee_r_btn:
-                positionStr = "trainee";
+                experienceStr = "trainee";
                 break;
             case R.id.edit_contact_junior_r_btn:
-                positionStr = "junior";
+                experienceStr = "junior";
                 break;
             case R.id.edit_contact_middle_r_btn:
-                positionStr = "middle";
+                experienceStr = "middle";
                 break;
             case R.id.edit_contact_senior_r_btn:
-                positionStr = "senior";
+                experienceStr = "senior";
+                break;
+            case R.id.edit_contact_tech_lead_r_btn:
+                experienceStr = "techLead";
                 break;
             case R.id.edit_contact_student_r_btn:
+                typeOfEmploymentStr = "Студент";
                 hideDeveloperFields();
                 break;
             case R.id.edit_contact_worker_r_btn:
+                typeOfEmploymentStr = "Працює";
                 showDeveloperFields();
+                break;
+            case R.id.edit_contact_add_language:
+                addLanguageField();
+                break;
+            case R.id.edit_contact_add_skill:
+                addSkillField();
                 break;
         }
     }
@@ -404,16 +647,20 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
     public RecruiterNotes getRecruiterNotes() {
         RecruiterNotes recruiterNotes = new RecruiterNotes();
 
-        recruiterNotes.setJobOrUniversity(jobOrUniversity.getText().toString());
+        //Id data must be update, then set recruiterNotesId
+        if (fragmentName != null && !fragmentName.equals("PhoneContactFragment")) {
+            recruiterNotes.setId(recruiterNotesId);
+        }
+
+        recruiterNotes.setTypeOfEmployment(typeOfEmploymentStr);
         recruiterNotes.setProfession(profession.getText().toString());
-        recruiterNotes.setPosition(positionStr);
-        recruiterNotes.setWorkInterests(jobInterest.getSelectedItem().toString());
-        recruiterNotes.setExperience(experience.getText().toString());
+        recruiterNotes.setExperience(experienceStr);
+        recruiterNotes.setJobOrUniversity(jobOrUniversity.getText().toString());
+        recruiterNotes.setJobInterests(jobInterest.getSelectedItem().toString());
         recruiterNotes.setAdvantages(advantages.getText().toString());
         recruiterNotes.setDisadvantages(disadvanteges.getText().toString());
         recruiterNotes.setNotes(notes.getText().toString());
-        recruiterNotes.setLanguage(language.getText().toString());
-        recruiterNotes.setSkill(skill.getText().toString());
+
 
         return recruiterNotes;
     }
@@ -422,13 +669,35 @@ public class EditContactFragment extends Fragment implements View.OnClickListene
     public Contact getContact() {
         Contact contact = new Contact();
 
+        //Id data must be update, then set id and recruiterNotesId
+        if (fragmentName != null && !fragmentName.equals("PhoneContactFragment")) {
+            contact.setId(id);
+            contact.setRecruiterNotesId(recruiterNotesId);
+        }
+
         contact.setName(name.getText().toString());
         contact.setPhone(phone.getText().toString());
         contact.setEmail(email.getText().toString());
         contact.setLinkedInLink(linkedIn.getText().toString());
         contact.setDateOfLatestContact(date.getText().toString());
-        contact.setPhotoUri(photoUri);
 
+        //set photoUri
+        if (photoUri == null || photoUri.isEmpty()) {
+            contact.setPhotoUri(photoUri);
+        } else {
+            contact.setPhotoUri(photoUri);
+        }
         return contact;
+    }
+
+    @Override
+    public List<Language> getLanguages() {
+
+        return getLanguageData();
+    }
+
+    @Override
+    public List<Skill> getSkills() {
+        return getSkillData();
     }
 }

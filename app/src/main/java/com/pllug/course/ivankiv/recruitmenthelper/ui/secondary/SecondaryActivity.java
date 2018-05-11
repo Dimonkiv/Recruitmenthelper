@@ -10,11 +10,11 @@ import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.WorkWithFragment;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.MainActivity;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.detailconatct.DetailContactFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.detailcontact.DetailContactFragment;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.EditContactFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.sendemail.SendEmailFragment;
 
 public class SecondaryActivity extends AppCompatActivity implements WorkWithFragment {
-    private FragmentManager fragmentManager;
 
 
     @Override
@@ -36,7 +36,7 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
             String fragmentName = intent.getStringExtra("fragmentName");
 
             //if data was getting from AddContactFragment
-            if (fragmentName.equals("AddContactFragment")) {
+            if (fragmentName.equals("PhoneContactFragment")) {
                 Contact contact = (Contact)intent.getSerializableExtra("contact");
 
                 showEditContactFragment(contact, fragmentName);
@@ -55,6 +55,20 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
 
                 showDetailContactFragment(id, recruiterNotesId, fragmentName);
             }
+            //if data was getting from LastConnectFragment
+            else if (fragmentName.equals("LastConnect")) {
+                long id = intent.getLongExtra("id", 0);
+                long recruiterNotesId = intent.getLongExtra("recruiterNotesId", 0);
+
+                showDetailContactFragment(id, recruiterNotesId, fragmentName);
+            }
+            //if data was getting from SelectedContactFragment
+            else if (fragmentName.equals("SelectedContact")) {
+                long id = intent.getLongExtra("id", 0);
+                long recruiterNotesId = intent.getLongExtra("recruiterNotesId", 0);
+
+                showDetailContactFragment(id, recruiterNotesId, fragmentName);
+            }
         }
     }
 
@@ -67,11 +81,11 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
         args.putString("fragmentName", fragmentName);
         fragment.setArguments(args);
 
-        addFragment(fragment);
+        replaceFragment(fragment);
     }
 
     //Method, which show EditContactFragment with parameters id, recruiterNotesId and fragmentName
-    private void showEditContactFragment(long id, long recruiterNotesId, String fragmentName) {
+    public void showEditContactFragment(long id, long recruiterNotesId, String fragmentName) {
         EditContactFragment fragment = new EditContactFragment();
 
         Bundle args = new Bundle();
@@ -80,11 +94,11 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
         args.putString("fragmentName", fragmentName);
         fragment.setArguments(args);
 
-        addFragment(fragment);
+        replaceFragment(fragment);
     }
 
     //Method, which show DetailContactFragment with parameters id, recruiterNotesId and fragmentName
-    private void showDetailContactFragment(long id, long recruiterNotesId, String fragmentName) {
+    public void showDetailContactFragment(long id, long recruiterNotesId, String fragmentName) {
         DetailContactFragment fragment = new DetailContactFragment();
 
         Bundle args = new Bundle();
@@ -93,12 +107,22 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
         args.putString("fragmentName", fragmentName);
         fragment.setArguments(args);
 
-        addFragment(fragment);
+        replaceFragment(fragment);
     }
 
-    //Method, which show DetailContactFragment without parameters
-    public void showDetailContactFragment() {
-        addFragment(new DetailContactFragment());
+    //Method, which open fragment send email
+    public void showSendEmailFragment(String email, long id, long recruiterNotesId, String fragmentName) {
+        SendEmailFragment fragment = new SendEmailFragment();
+
+        Bundle args = new Bundle();
+        args.putString("email", email);
+        args.putLong("id", id);
+        args.putLong("recruiterNotesId", recruiterNotesId);
+        args.putString("fragmentName", fragmentName);
+
+        fragment.setArguments(args);
+
+        replaceFragment(fragment);
     }
 
     //Method, which go to MainActivity and passes him fragmentName
@@ -107,20 +131,15 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
 
         intent.putExtra("fragmentName", fragmentName);
         startActivity(intent);
+        finish();
     }
 
 
-    @Override
-    public void addFragment(Fragment fragment) {
-        fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .add(R.id.activity_secondary_frame_container, fragment)
-                .commit();
-    }
 
     @Override
     public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.activity_secondary_frame_container, fragment)
                 .addToBackStack(null)

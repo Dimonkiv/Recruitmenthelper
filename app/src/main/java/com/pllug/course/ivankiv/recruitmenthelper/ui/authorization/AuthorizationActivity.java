@@ -38,10 +38,10 @@ public class AuthorizationActivity extends AppCompatActivity implements WorkWith
     public void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     //Method for adding fragment in FrameLayout
-    @Override
     public void addFragment(Fragment fragment) {
         fragmentManager = getSupportFragmentManager();
 

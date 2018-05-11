@@ -3,367 +3,382 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/detail_contact_toolbar"
         style="@style/Toolbar" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_white_with_shadow"
                     android:layout_marginTop="50dp"
+                    android:background="@drawable/background_white_with_shadow"
                     android:orientation="vertical"
-                    android:paddingTop="50dp"
-                    android:paddingBottom="25dp">
+                    android:paddingBottom="25dp"
+                    android:paddingTop="50dp">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Dima Ivankiv"
-                        android:textSize="25sp"
-                        android:textColor="@color/primaryText"
-                        android:layout_gravity="center_horizontal"/>
-                    <TextView
+                        android:id="@+id/detail_contact_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="Junior android developer"
+                        android:text="Dima Ivankiv"
                         android:textColor="@color/primaryText"
-                        android:textSize="18sp"/>
+                        android:textSize="25sp" />
+
+                    <LinearLayout
+                        android:id="@+id/detail_contact_profession_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <TextView
+                            android:id="@+id/detail_contact_experience"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="junior"
+                            android:textColor="@color/primaryText"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/detail_contact_profession"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="android developer"
+                            android:textColor="@color/primaryText"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
                     <TextView
+                        android:id="@+id/detail_contact_type_of_employment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Студент"
+                        android:textColor="@color/primaryText"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+
+                    <TextView
+                        android:id="@+id/detail_contact_job_or_university"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="Vakoms"
                         android:textColor="@color/primaryText"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
                         <ImageButton
+                            android:id="@+id/detail_contact_email"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:background="@android:color/transparent"
-                            android:src="@drawable/icon_mail_green"
-                            android:layout_weight="1"/>
+                            android:src="@drawable/icon_mail_green" />
+
                         <ImageButton
+                            android:id="@+id/detail_contact_phone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:background="@android:color/transparent"
-                            android:src="@drawable/icon_phone_green"
-                            android:layout_weight="1"/>
+                            android:src="@drawable/icon_phone_green" />
+
                         <ImageButton
+                            android:id="@+id/detail_contact_linkedin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:background="@android:color/transparent"
-                            android:src="@drawable/icon_likedin_green"
-                            android:layout_weight="1"/>
+                            android:src="@drawable/icon_likedin_green" />
+
                         <ImageButton
+                            android:id="@+id/detail_contact_selected"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:background="@android:color/transparent"
-                            android:src="@drawable/icon_star_green"
-                            android:layout_weight="1"/>
+                            android:src="@drawable/icon_star_actived_green" />
+
                         <ImageButton
+                            android:id="@+id/detail_contact_edit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:background="@android:color/transparent"
-                            android:src="@drawable/icon_edit_green"
-                            android:layout_weight="1"/>
+                            android:src="@drawable/icon_edit_green" />
                     </LinearLayout>
+
                     <TextView
+                        android:id="@+id/detail_contact_job_interest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="18sp"
+                        android:text="Відкритий для нових можливостей"
                         android:textColor="@color/primaryText"
-                        android:text="Відкритий для нових можливостей"/>
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/detail_contact_avatar"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/man"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/man" />
             </RelativeLayout>
+
             <LinearLayout
+                android:id="@+id/detail_contact_skills_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_white_with_shadow"
-                android:padding="10dp"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:background="@drawable/background_white_with_shadow"
+                android:orientation="vertical"
+                android:padding="10dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_skills_green"
-                        android:layout_margin="10dp"/>
+                        android:layout_margin="10dp"
+                        android:src="@drawable/icon_skills_green" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:text="Навички"
                         android:textColor="@color/primaryText"
-                        android:textSize="18sp"
-                        android:layout_gravity="center_vertical"/>
+                        android:textSize="18sp" />
                 </LinearLayout>
+
                 <TextView
+                    android:id="@+id/detail_contact_skills_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Android, Java, OOP, SQL, SQLITE, Retrofit"
                     android:textColor="@color/primaryText"
-                    android:textSize="18sp"
-                    android:text="Android, Java, OOP, SQL, SQLITE, Retrofit"/>
+                    android:textSize="18sp" />
 
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/detail_contact_languages_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_white_with_shadow"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:orientation="vertical">
+                android:background="@drawable/background_white_with_shadow"
+                android:orientation="vertical"
+                android:padding="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:textColor="@color/primaryText"
                     android:text="Іноземні мови"
-                    android:textSize="18sp"/>
-                <LinearLayout
+                    android:textColor="@color/primaryText"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/detail_contact_language_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_languge_green"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginBottom="5dp"
-                            android:text="English pre intermediate"
-                            android:textColor="@color/primaryText"
-                            android:textSize="18sp"/>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorPrimary"/>
-                    </LinearLayout>
-
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_languge_green"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginBottom="5dp"
-                            android:text="Російська - вільне володіння"
-                            android:textColor="@color/primaryText"
-                            android:textSize="18sp"/>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorPrimary"/>
-                    </LinearLayout>
-
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_languge_green"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginBottom="5dp"
-                            android:text="Польська початковий рівень"
-                            android:textColor="@color/primaryText"
-                            android:textSize="18sp"/>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorPrimary"/>
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
+                    android:layout_height="match_parent"/>
 
 
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/detail_contact_recruiter_notes_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/background_white_with_shadow">
-                <TextView
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_white_with_shadow"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:id="@+id/detail_contact_date_of_last_connect_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/primaryText"
-                    android:text="Останній контакт"
-                    android:layout_marginLeft="10dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
-                    <ImageView
+                    android:orientation="vertical">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_date_green"/>
+                        android:layout_marginLeft="30dp"
+                        android:text="Останній контакт"
+                        android:textColor="@color/primaryText"
+                        android:textSize="18sp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
+                        android:layout_margin="10dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginBottom="5dp"
-                            android:text="21.04.18"
-                            android:textColor="@color/primaryText"
-                            android:textSize="18sp"/>
-                        <View
+                            android:src="@drawable/icon_date_green" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorPrimary"/>
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/detail_contact_date_of_last_connect"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:layout_marginLeft="10dp"
+                                android:text="21.04.18"
+                                android:textColor="@color/primaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorPrimary" />
+                        </LinearLayout>
+
+
                     </LinearLayout>
-
-
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/detail_contact_advantages_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_advantages_green"/>
+                        android:src="@drawable/icon_advantages_green" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
+                            android:id="@+id/detail_contact_advantages"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
                             android:text="Сильна технічна сторона"
                             android:textColor="@color/primaryText"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/colorPrimary"/>
+                            android:background="@color/colorPrimary" />
                     </LinearLayout>
 
 
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/detail_contact_disadvantages_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_disadvantages_grees"/>
+                        android:src="@drawable/icon_disadvantages_grees" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
+                            android:id="@+id/detail_contact_disadvantages"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
                             android:text="Слабкий рівень англійської мови"
                             android:textColor="@color/primaryText"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/colorPrimary"/>
+                            android:background="@color/colorPrimary" />
                     </LinearLayout>
 
 
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/detail_contact_notes_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp">
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_note_green"/>
+                        android:src="@drawable/icon_note_green" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
                         <TextView
+                            android:id="@+id/detail_contact_notes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
                             android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
                             android:text="Дуже відкрита і товариська особа, легко вливається в компанію"
                             android:textColor="@color/primaryText"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/colorPrimary"/>
+                            android:background="@color/colorPrimary" />
                     </LinearLayout>
 
 

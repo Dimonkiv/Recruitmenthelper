@@ -36,14 +36,24 @@
             android:layout_height="wrap_content"
             android:text="Зацікавлений в роботі"/>
     </LinearLayout>
-    <ImageButton
-        android:id="@+id/item_contact_list_edit_btn"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/icon_skill"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentBottom="true">
+        <ImageButton
+            android:id="@+id/item_contact_list_edit_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/icon_edit_pen_green" />
+        <ImageButton
+            android:id="@+id/item_contact_list_delete_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/icon_delete_green" />
+    </LinearLayout>
 
-        />
 </RelativeLayout>

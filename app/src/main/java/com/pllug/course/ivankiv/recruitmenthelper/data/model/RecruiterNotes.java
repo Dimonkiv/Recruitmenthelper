@@ -9,16 +9,15 @@ public class RecruiterNotes {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
+    private String typeOfEmployment;
 
     private String profession;
 
-    private String position;
+    private String experience;
 
     private String jobOrUniversity;
 
-    private String workInterests;
-
-    private String experience;
+    private String jobInterests;
 
     private String advantages;
 
@@ -26,10 +25,13 @@ public class RecruiterNotes {
 
     private String notes;
 
-    private String language;
+    public String getTypeOfEmployment() {
+        return typeOfEmployment;
+    }
 
-    private String skill;
-
+    public void setTypeOfEmployment(String typeOfEmployment) {
+        this.typeOfEmployment = typeOfEmployment;
+    }
 
     public long getId() {
         return id;
@@ -48,14 +50,6 @@ public class RecruiterNotes {
         this.profession = profession;
     }
 
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
     public String getJobOrUniversity() {
         return jobOrUniversity;
     }
@@ -64,12 +58,12 @@ public class RecruiterNotes {
         this.jobOrUniversity = jobOrUniversity;
     }
 
-    public String getWorkInterests() {
-        return workInterests;
+    public String getJobInterests() {
+        return jobInterests;
     }
 
-    public void setWorkInterests(String workInterests) {
-        this.workInterests = workInterests;
+    public void setJobInterests(String jobInterests) {
+        this.jobInterests = jobInterests;
     }
 
     public String getExperience() {
@@ -104,19 +98,4 @@ public class RecruiterNotes {
         this.notes = notes;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public String getSkill() {
-        return skill;
-    }
-
-    public void setSkill(String skill) {
-        this.skill = skill;
-    }
 }

@@ -10,9 +10,11 @@ public class ContactListItem {
 
     private long recruiterNotesId;
 
+    private String typeOfEmployment;
+
     private String profession;
 
-    private String workInterests;
+    private String jobInterests;
 
 
 
@@ -40,6 +42,14 @@ public class ContactListItem {
         this.photoUri = photoUri;
     }
 
+    public String getTypeOfEmployment() {
+        return typeOfEmployment;
+    }
+
+    public void setTypeOfEmployment(String typeOfEmployment) {
+        this.typeOfEmployment = typeOfEmployment;
+    }
+
     public String getProfession() {
         return profession;
     }
@@ -48,12 +58,12 @@ public class ContactListItem {
         this.profession = profession;
     }
 
-    public String getWorkInterests() {
-        return workInterests;
+    public String getJobInterests() {
+        return jobInterests;
     }
 
-    public void setWorkInterests(String workInterests) {
-        this.workInterests = workInterests;
+    public void setJobInterests(String jobInterests) {
+        this.jobInterests = jobInterests;
     }
 
     public long getRecruiterNotesId() {

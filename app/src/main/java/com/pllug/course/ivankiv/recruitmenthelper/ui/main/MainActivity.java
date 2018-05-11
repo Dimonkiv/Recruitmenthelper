@@ -12,30 +12,29 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.WorkWithFragment;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.main.addcontact.AddContactFragment;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.main.contactlist.ContactListFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.MainScreenFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.phonecontact.PhoneContactFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.contactlist.ContactListFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.selected.SelectedContactFragment;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.SecondaryActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MainActivity extends AppCompatActivity implements MainContract.View, WorkWithFragment {
+public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView navigationView;
-    private MainPresenter presenter;
     private TextView name, lastname, email;
     private CircleImageView userAvatar;
     private Toolbar toolbar;
-    private FragmentManager fragmentManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +42,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setContentView(R.layout.activity_main);
 
         initView();
-        initPresenter();
         initToolbar();
         initNavigationDrawer();
         initMDrawerToggle();
         showFragment();
+
     }
 
     //Initialization View
@@ -57,10 +56,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         toolbar = findViewById(R.id.main_activity_toolbar);
     }
 
-    //Initialization Presenter
-    private void initPresenter() {
-        presenter = new MainPresenter(this);
-    }
 
     //Initialization Toolbar
     private void initToolbar() {
@@ -69,9 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     //Initialization Navigation Drawer
     private void initNavigationDrawer() {
-        initNavigationDrawerListener(navigationView);
-        setHeaderDataOfNavigationDrawer();
-    }
+        initNavigationDrawerListener(navigationView);    }
 
     //Initialization ActionBarDrawerToggle
     private void initMDrawerToggle() {
@@ -91,37 +84,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     }
 
-    //Method which set data into NavigationDrawer header from database
-    private void setHeaderDataOfNavigationDrawer() {
-        View header = navigationView.getHeaderView(0);
-
-        //Get user from presenter
-        User user = presenter.getUser();
-
-        //Initialization header elements
-        name = header.findViewById(R.id.header_name);
-        lastname = header.findViewById(R.id.header_lastname);
-        email = header.findViewById(R.id.header_email);
-        userAvatar = header.findViewById(R.id.header_avatar);
-
-        //Show data from db
-        if (user.getName() != null) {
-            name.setText(user.getName());
-        }
-        if (user.getLastname() != null) {
-            lastname.setText(user.getLastname());
-        }
-        if (user.getEmail() != null) {
-            email.setText(user.getEmail());
-        }
-
-       if (user.getImageUri() != null) {
-            Glide.with(this)
-                    .load(user.getImageUri())
-                    .into(userAvatar);
-        }
-
-    }
 
     //Method for initialization Navigation Drawer Listener
     private void initNavigationDrawerListener(NavigationView navigationView) {
@@ -141,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 Toast.makeText(this, "my page", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.navigation_drawer_main_screen:
-                showContactListFragment();
+                showMainScreenFragment("noneFragment");
                 break;
             case R.id.navigation_drawer_import_linkedin:
 
@@ -150,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 showAddContact();
                 break;
             case R.id.navigation_drawer_selected_contacts:
-
+                showSelectedContactFragment();
                 break;
             case R.id.navigation_drawer_settings:
 
@@ -161,11 +123,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         }
         toolbar.setTitle(item.getTitle());
         drawerLayout.closeDrawers();
-    }
 
-    //Method which show AddContactFragment
-    public void showAddContact() {
-        addFragment(new AddContactFragment());
     }
 
     //Method, which show fragment
@@ -175,19 +133,64 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         if (intent != null && intent.getStringExtra("fragmentName") != null) {
             String fragmentName = intent.getStringExtra("fragmentName");
 
-            if (fragmentName.equals("AddContactFragment")) {
+            if (fragmentName.equals("PhoneContactFragment")) {
                 showAddContact();
-            } else if (fragmentName.equals("ContactListEditBtn")) {
-                showContactListFragment();
+            } else if (fragmentName.equals("ContactListEditBtn") || fragmentName.equals("ContactList") || fragmentName.equals("LastConnect")) {
+                showMainScreenFragment(fragmentName);
+            } else if (fragmentName.equals("SelectedContact")) {
+                showSelectedContactFragment();
             }
         } else {
-            showContactListFragment();
+            showMainScreenFragment("noneFragment");
         }
     }
+
+    //Method which show PhoneContactFragment
+    public void showAddContact() {
+        replaceFragment(new PhoneContactFragment());
+    }
+
+    //Method, which show MainScreenFragment
+    public void showMainScreenFragment(String fragmentName) {
+        getSupportActionBar().setTitle("Головний екран");
+        MainScreenFragment fragment = new MainScreenFragment();
+
+        Bundle args = new Bundle();
+        args.putString("fragmentName", fragmentName);
+        fragment.setArguments(args);
+
+        replaceFragment(fragment);
+    }
+
     //Method which show ContactListFragment
     public void showContactListFragment() {
-        toolbar.setTitle("Головний екран");
-        addFragment(new ContactListFragment());
+        getSupportActionBar().setTitle("Головний екран");
+        replaceFragment(new ContactListFragment());
+    }
+
+    //Method which show SelectedContactFragment
+    public void showSelectedContactFragment() {
+        getSupportActionBar().setTitle("Вибрані контакти");
+        replaceFragment(new SelectedContactFragment());
+    }
+
+    //Method, which go to SecondaryActivity and send Contact
+    public void goToSecondaryActivity(Contact contact, String fragmentName) {
+        Intent intent = new Intent(this, SecondaryActivity.class);
+        intent.putExtra("fragmentName", fragmentName);
+        intent.putExtra("contact", contact);
+        startActivity(intent);
+        finish();
+    }
+
+    //Method, which go to SecondaryActivity and send recruiterNotesId, id
+    public void goToSecondaryActivity(long recruiterNotesId, long id, String fragmentName) {
+        Intent intent = new Intent(this, SecondaryActivity.class);
+        intent.putExtra("fragmentName", fragmentName);
+        intent.putExtra("recruiterNotesId", recruiterNotesId);
+        intent.putExtra("id", id);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -199,19 +202,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         return super.onOptionsItemSelected(item);
     }
 
-    //Method for adding fragment in FrameLayout
-    @Override
-    public void addFragment(Fragment fragment) {
-        fragmentManager = getSupportFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .add(R.id.main_activity_frame_container, fragment)
-                .commit();
-    }
-
     //Method for replace fragment
-    @Override
     public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_activity_frame_container, fragment)
                 .addToBackStack(null)

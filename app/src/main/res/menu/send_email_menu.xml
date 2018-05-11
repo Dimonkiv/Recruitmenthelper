@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/send_email_toolbar_send_btn"
+        app:showAsAction="always"
+        android:title="Надіслати"
+        android:icon="@drawable/icon_send" />
+
+
+</menu>

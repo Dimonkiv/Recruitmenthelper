@@ -26,6 +26,8 @@ public class Contact implements Serializable {
 
     private long recruiterNotesId;
 
+    private boolean selected;
+
 
     public long getId() {
         return id;
@@ -91,4 +93,11 @@ public class Contact implements Serializable {
         this.photoUri = photoUri;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 }

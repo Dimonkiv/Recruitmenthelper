@@ -16,13 +16,20 @@ public interface ContactDao {
     @Query("SELECT * FROM Contact")
     List<Contact> getAll();
 
+    @Query("SELECT * FROM Contact WHERE selected = :isSelected")
+    List<Contact> getAllBySelected(boolean isSelected);
+
     @Query("SELECT * FROM Contact WHERE id = :id")
     Contact getById(long id);
+
+    @Query("SELECT * FROM Contact WHERE dateOfLatestContact IS NOT NULL ORDER BY dateOfLatestContact DESC")
+    List<Contact> getAllByDate();
+
 
     @Query("SELECT * FROM Contact WHERE recruiterNotesId = :recruiterNotesId")
     Contact getByRecruiterId(long recruiterNotesId);
 
-    @Query("SELECT Contact.id, Contact.name, Contact.photoUri, Contact.recruiterNotesId, RecruiterNotes.profession, RecruiterNotes.workInterests " +
+    @Query("SELECT Contact.id, Contact.name, Contact.photoUri, Contact.recruiterNotesId,RecruiterNotes.typeOfEmployment ,RecruiterNotes.profession, RecruiterNotes.jobInterests " +
             "FROM Contact, RecruiterNotes WHERE recruiterNotes.id == Contact.recruiterNotesId")
     List<ContactListItem> getContactWithNotes();
 
@@ -30,8 +37,11 @@ public interface ContactDao {
     void insert(Contact contact);
 
     @Update
-    void update(Contact contact);
+    int update(Contact contact);
 
     @Delete
     void delete(Contact contact);
+
+    @Query("UPDATE Contact SET selected = :state WHERE id = :id")
+    void updateSelected(boolean state, long id);
 }
