@@ -30,8 +30,11 @@ public class PhoneContactLoader {
                 int id = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY));
                 Long dateL = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts.LAST_TIME_CONTACTED));
-                Date df = new java.util.Date(dateL);
-                String date = new SimpleDateFormat("dd.MM.yyyy").format(df);
+                String date = null;
+                if (dateL != 0) {
+                    Date df = new java.util.Date(dateL);
+                    date = new SimpleDateFormat("dd.MM.yyyy").format(df);
+                }
                 Integer hasPhone = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)));
                 String photoUri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
 

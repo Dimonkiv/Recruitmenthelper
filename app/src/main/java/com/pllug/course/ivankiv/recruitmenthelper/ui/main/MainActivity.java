@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.expandedsearch.ExpandedSearchFragment;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.MainScreenFragment;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.phonecontact.PhoneContactFragment;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.contactlist.ContactListFragment;
@@ -111,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.navigation_drawer_add_contact:
                 showAddContact();
                 break;
+            case R.id.navigation_drawer_expanded_search:
+                showExpandedSearchFragment();
+                break;
             case R.id.navigation_drawer_selected_contacts:
                 showSelectedContactFragment();
                 break;
@@ -139,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
                 showMainScreenFragment(fragmentName);
             } else if (fragmentName.equals("SelectedContact")) {
                 showSelectedContactFragment();
+            } else if (fragmentName.equals("ExpandedSearch")) {
+                showExpandedSearchFragment();
             }
         } else {
             showMainScreenFragment("noneFragment");
@@ -147,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Method which show PhoneContactFragment
     public void showAddContact() {
+        getSupportActionBar().setTitle("Додати з контактів");
         replaceFragment(new PhoneContactFragment());
     }
 
@@ -172,6 +179,12 @@ public class MainActivity extends AppCompatActivity {
     public void showSelectedContactFragment() {
         getSupportActionBar().setTitle("Вибрані контакти");
         replaceFragment(new SelectedContactFragment());
+    }
+
+    //Method which show ExpandedSearchFragment
+    public void showExpandedSearchFragment() {
+        getSupportActionBar().setTitle("Розширений пошук");
+        replaceFragment(new ExpandedSearchFragment());
     }
 
     //Method, which go to SecondaryActivity and send Contact

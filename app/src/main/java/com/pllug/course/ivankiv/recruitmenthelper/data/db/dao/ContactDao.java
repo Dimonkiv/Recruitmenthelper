@@ -34,7 +34,7 @@ public interface ContactDao {
     List<ContactListItem> getContactWithNotes();
 
     @Insert
-    void insert(Contact contact);
+    long insert(Contact contact);
 
     @Update
     int update(Contact contact);

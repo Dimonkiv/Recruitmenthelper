@@ -1,36 +1,67 @@
 package com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact;
 
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.RecruiterNotes;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
 
-import java.util.List;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 
 interface EditContactContract {
 
     interface View {
-        RecruiterNotes getRecruiterNotes();
 
-        Contact getContact();
+        void onCreateOptionMenu(Menu menu, MenuInflater inflater);
 
-        List<Language> getLanguages();
+        void onOptionsItemSelected(MenuItem item);
 
-        List<Skill> getSkills();
+        void setPhoto(String photoUri);
+
+        void setContact(Contact contact);
+
+        void setFragmentName(String fragmentName);
     }
 
     interface Presenter {
 
-        Contact getContact(long id);
 
-        RecruiterNotes getRecruiterNote(long recruiterNotesId);
+    }
 
-        List<Language> getLanguages(long recruiterNotesId);
+    interface Fragment {
+        void startActivityForResult(Intent intent);
 
-        List<Skill> getSkills(long recruiterNotesId);
+        void setDataToMainActivity(String fragmentName);
 
-        boolean checkedEnteredData(String fragmentName);
+        //Set Contact data
+        void setName(String name);
 
+        void setPhone(String phone);
+
+        void setEmail(String email);
+
+        void setLinkedInLink(String linkedInLink);
+
+        void setDateOfLatestConnect(String dateOfLatestConnect);
+
+        void setPhotoUri(String photoUri);
+
+        //set RecruiterNotesData
+        void setTypeOfEmployment(String typeOfEmployment);
+
+        void setProfession(String profession);
+
+        void setExperience(String experience);
+
+        void setJobOrUniversity(String jobOrUniversity);
+
+        void setJobInterest(String jobInterest);
+
+        void setAdvantages(String advantages);
+
+        void setDisadvantages(String disadvantages);
     }
 
 }

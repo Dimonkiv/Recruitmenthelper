@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
@@ -32,6 +34,8 @@ public class LastConnectFragment extends Fragment implements LastConnectContract
     //View
     private RecyclerView recyclerView;
     private EditText searchEdit;
+    private RelativeLayout no_result_container;
+    private LinearLayout search_container;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +57,8 @@ public class LastConnectFragment extends Fragment implements LastConnectContract
     private void initView() {
         recyclerView = root.findViewById(R.id.last_connect_recycler);
         searchEdit = root.findViewById(R.id.last_connect_search_edit);
+        search_container = root.findViewById(R.id.last_connect_search_container);
+        no_result_container = root.findViewById(R.id.last_connect_no_result_container);
     }
 
     //Initialization presenter
@@ -71,7 +77,16 @@ public class LastConnectFragment extends Fragment implements LastConnectContract
     //Method, which get contact list from presenter
     private void getDataFromPresenter() {
         contacts.addAll(presenter.getContact());
-        adapter.notifyDataSetChanged();
+        if (contacts.isEmpty()) {
+            no_result_container.setVisibility(View.VISIBLE);
+            search_container.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            no_result_container.setVisibility(View.GONE);
+            search_container.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     //Initialization TextChangeListener for search edit text

@@ -1,11 +1,16 @@
 package com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -17,10 +22,19 @@ import java.util.List;
 
 public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillHolder> {
 
-    public List<SkillHolder> skillHolders = new ArrayList<>();
+    public interface SkillAdapterListener {
+        void onRemoveSkill(int position);
+    }
+
     private List<Skill> skills = new ArrayList<>();
-    int skillHoldersSize = 0;
-    int countForInitSkills = 0;
+    private Context mContext;
+    private SkillAdapterListener listener;
+    private String typicalSkills[];
+
+    public SkillAdapter(Context mContext, SkillAdapterListener listener) {
+        this.mContext = mContext;
+        this.listener = listener;
+    }
 
 
     @NonNull
@@ -30,7 +44,6 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillHolder>
                 .inflate(R.layout.item_skill, parent, false);
 
         SkillHolder skillHolder = new SkillHolder(v);
-        skillHolders.add(skillHolder);
 
         return skillHolder;
     }
@@ -38,52 +51,74 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillHolder>
     @Override
     public void onBindViewHolder(@NonNull final SkillHolder holder, final int position) {
         holder.skillEditText.setText("");
-        Log.d("mySkill", holder.getAdapterPosition() + " - " + position);
-        if (holder.getAdapterPosition() < skillHolders.size()) {
-            skillHolders.set(holder.getAdapterPosition(), holder);
-        } else {
-            skillHolders.add(holder);
+        Log.d("skill - ", "" + position);
+        if (holder.skillEditText != null) {
+            initTypicalSkills();
+
+            holder.skillEditText.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, typicalSkills));
+
+            holder.skillEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    skills.get(position).setSkill(charSequence.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
         }
 
         holder.skillBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeSkillField(holder);
+                if(listener != null) {
+                    listener.onRemoveSkill(position);
+                }
             }
         });
 
-        if (holder.getAdapterPosition() < skills.size() && countForInitSkills < skills.size()) {
-            countForInitSkills++;
-            if (holder.skillEditText != null) {
-                holder.skillEditText.setText(skills.get(holder.getAdapterPosition()).getSkill());
-            }
+        if (holder.skillEditText != null) {
+            holder.skillEditText.setText(skills.get(holder.getAdapterPosition()).getSkill());
         }
     }
 
     @Override
     public int getItemCount() {
-        return skillHoldersSize;
+        return skills.size();
     }
 
-    private void removeSkillField(SkillHolder holder) {
-        int newPosition = holder.getAdapterPosition();
-        skillHolders.remove(newPosition);
-        skillHoldersSize--;
-        notifyItemRemoved(newPosition);
+    public List<Skill> getSkills() {
+        return skills;
     }
 
-    public void addSkill() {
-        skillHoldersSize++;
-    }
-
-    public void addAllSkill(List<Skill> skills) {
+    public void addAllSkill(List<Skill> newSkills) {
         this.skills.clear();
-        this.skills.addAll(skills);
-        skillHoldersSize = skills.size();
+
+        if(newSkills != null) {
+            this.skills.addAll(newSkills);
+        }else {
+            skills = new ArrayList<>();
+        }
+
         notifyDataSetChanged();
     }
+
+    private void initTypicalSkills() {
+        typicalSkills = new String[] {"Java", "Android", "Git", "Sql", "C", "C++", "Python", "Django", "Html", "Css"
+                , "JavaScript", "Jquery", "React", "AngularJs", "Angular 2", "Vue.js", "Backbone.js", "Ember.js", "Knockout.js", "Node.js"
+                , "Html5", "Css3", "C#", "Kotlin", "Room", "SQLite", "Retrofit", "Rest.API", ".NET", "objective c" , "swift"
+                , "Php", "Assembler", "Менеджмент", "Підбір персоналу", "Набір IT-персоналу", "Управління персоналом", "Android SDK"
+                , "Android NDK"};
+    }
+
     public class SkillHolder extends RecyclerView.ViewHolder{
-        public EditText skillEditText;
+        public AutoCompleteTextView skillEditText;
         public ImageButton skillBtn;
 
 

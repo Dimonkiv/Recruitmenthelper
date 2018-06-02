@@ -19,17 +19,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.AppDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.InitDatabase;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.authorization.AuthorizationActivity;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class SignUpByEmailFragment extends Fragment implements SignUpByEmailContract.View {
     private View root;
     private Toolbar toolbar;
-    private ImageView photo;
+    private CircleImageView photo;
     private ImageButton btnLoadPhoto;
     private EditText name, lastname, email, phone,
             password, reenterPasword;
@@ -124,7 +127,9 @@ public class SignUpByEmailFragment extends Fragment implements SignUpByEmailCont
             //Get uri from choices image
             imageUri = data.getData();
             //Show photo in imageVew
-            presenter.showPhoto();
+            Glide.with(getActivity())
+                    .load(imageUri)
+                    .into(photo);
         }
     }
 
@@ -148,16 +153,6 @@ public class SignUpByEmailFragment extends Fragment implements SignUpByEmailCont
 
         }
         return true;
-    }
-
-    @Override
-    public Uri getImageUri() {
-        return imageUri;
-    }
-
-    @Override
-    public ImageView getImageView() {
-        return photo;
     }
 
     @Override

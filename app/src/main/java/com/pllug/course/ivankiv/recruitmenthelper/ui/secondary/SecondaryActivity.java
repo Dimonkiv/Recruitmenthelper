@@ -49,21 +49,7 @@ public class SecondaryActivity extends AppCompatActivity implements WorkWithFrag
                 showEditContactFragment(id, recruiterNotesId, fragmentName);
             }
             //if data was getting from ContactListFragment
-            else if (fragmentName.equals("ContactList")) {
-                long id = intent.getLongExtra("id", 0);
-                long recruiterNotesId = intent.getLongExtra("recruiterNotesId", 0);
-
-                showDetailContactFragment(id, recruiterNotesId, fragmentName);
-            }
-            //if data was getting from LastConnectFragment
-            else if (fragmentName.equals("LastConnect")) {
-                long id = intent.getLongExtra("id", 0);
-                long recruiterNotesId = intent.getLongExtra("recruiterNotesId", 0);
-
-                showDetailContactFragment(id, recruiterNotesId, fragmentName);
-            }
-            //if data was getting from SelectedContactFragment
-            else if (fragmentName.equals("SelectedContact")) {
+            else if (fragmentName.equals("ContactList") || fragmentName.equals("LastConnect") || fragmentName.equals("SelectedContact") || fragmentName.equals("ExpandedSearch")) {
                 long id = intent.getLongExtra("id", 0);
                 long recruiterNotesId = intent.getLongExtra("recruiterNotesId", 0);
 

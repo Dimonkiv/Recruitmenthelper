@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
@@ -29,8 +31,11 @@ public class ContactListFragment extends Fragment implements ContactListContract
     private List<ContactListItem> contacts;
     private ContactListAdapter adapter;
 
+    //View
     private RecyclerView recyclerView;
     private EditText searchEdit;
+    private RelativeLayout no_result_container;
+    private LinearLayout search_container;
 
     @Nullable
     @Override
@@ -50,6 +55,8 @@ public class ContactListFragment extends Fragment implements ContactListContract
     private void initView() {
         recyclerView = root.findViewById(R.id.contact_list_container);
         searchEdit = root.findViewById(R.id.contact_list_search_edit);
+        search_container = root.findViewById(R.id.contact_list_search_container);
+        no_result_container = root.findViewById(R.id.contact_list_no_result_container);
     }
 
     //Initialization adapter
@@ -70,7 +77,17 @@ public class ContactListFragment extends Fragment implements ContactListContract
     //Method, which show contact list
     private void showContactList() {
         contacts.addAll(presenter.getData());
-        adapter.notifyDataSetChanged();
+
+        if (contacts.isEmpty()) {
+            no_result_container.setVisibility(View.VISIBLE);
+            search_container.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            no_result_container.setVisibility(View.GONE);
+            search_container.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     //Initialization TextChangeListener for search edit text

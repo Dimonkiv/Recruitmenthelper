@@ -4,7 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:focusableInTouchMode="true">
+    <RelativeLayout
+        android:id="@+id/selected_contact_no_result_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/selected_contact_image_no_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_no_result"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/selected_contact_image_no_result"
+            android:text="Ви ще не додали до вподобаних жодний контакт!"
+            android:textColor="@color/primaryText"
+            android:textSize="25sp"
+            android:gravity="center"/>
+    </RelativeLayout>
     <LinearLayout
+        android:id="@+id/selected_contact_search_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

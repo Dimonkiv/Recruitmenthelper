@@ -7,6 +7,7 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.SkillForExpandedSearch;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ public interface SkillDao {
 
     @Query("SELECT * FROM Skill WHERE recruiterNotesId = :recruiterNotesId")
     List<Skill> getAllByRecruiterNotesId(long recruiterNotesId);
+
+    @Query("SELECT Contact.id, Contact.name, Contact.photoUri, Skill.skill, Skill.recruiterNotesId FROM Skill, Contact WHERE Contact.recruiterNotesId == Skill.recruiterNotesId")
+    List<SkillForExpandedSearch> getAllSkillForSearch();
 
     @Insert
     long insert(Skill skill);

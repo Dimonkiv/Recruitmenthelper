@@ -1,11 +1,14 @@
 package com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.detailcontact;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,6 +42,8 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
 
     private View root;
     private Toolbar toolbar;
+    private static final int REQUEST_CODE_CALL_PHONE = 1;
+    private static boolean CALL_PHONE_GRANTED = false;
 
     //View
     private CircleImageView avatar;
@@ -162,7 +167,7 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
     //Initialization toolbar
     private void initToolbar() {
         ((SecondaryActivity) getActivity()).setSupportActionBar(toolbar);
-        if (contact.getName() != null) {
+        if (contact != null && contact.getName() != null) {
             ((SecondaryActivity) getActivity()).getSupportActionBar().setTitle(contact.getName());
         }
         //Set back button
@@ -189,7 +194,7 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
 
         //If PhotoUri is not equals null and not empty
         //then set up photo into avatar
-        if (contact.getPhotoUri() != null && !contact.getPhotoUri().isEmpty()) {
+        if (contact != null && contact.getPhotoUri() != null && !contact.getPhotoUri().isEmpty()) {
             Glide.with(this)
                     .load(contact.getPhotoUri())
                     .into(avatar);
@@ -197,7 +202,7 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
 
         //If Name is not equals null and not empty
         //then set text(Name) into name
-        if (contact.getName() != null && !contact.getName().isEmpty()) {
+        if (contact != null && contact.getName() != null && !contact.getName().isEmpty()) {
             name.setText(contact.getName());
         }
 
@@ -240,6 +245,8 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
         //than set jobOrUniversity text into jobOrUniversity
         if (recruiterNotes.getJobOrUniversity() != null && !recruiterNotes.getJobOrUniversity().isEmpty()) {
             jobOrUniversity.setText(recruiterNotes.getJobOrUniversity());
+        } else {
+            jobOrUniversity.setVisibility(View.GONE);
         }
 
         //If JobInterest is not equals null and not empty
@@ -317,7 +324,7 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
     private void setDataIntoLanguageContainer() {
         //if language list is not empty
         //then update languge adapter
-        if (languages != null && languages.size() > 0) {
+        if (languages != null && languages.size() > 0 ) {
             adapter.notifyDataSetChanged();
         }
         //else hide languageContainer
@@ -420,6 +427,44 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
     private void editContact() {
         ((SecondaryActivity)getActivity()).showEditContactFragment(id, recruiterNotesId, "DetailContact");
     }
+
+    //Method for set permission CALL_PHONE
+    private void setPermission() {
+        //get permission from manifest
+        int hasReadContactPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE);
+
+        //If device has API to 23, set permission
+        if (hasReadContactPermission == PackageManager.PERMISSION_GRANTED) {
+            CALL_PHONE_GRANTED = true;
+        } else {
+            //Call Compat Activity for set permission
+            requestPermissions( new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CODE_CALL_PHONE);
+        }
+
+        //If permission allow
+        if (CALL_PHONE_GRANTED) {
+            callByPhone();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_CALL_PHONE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    CALL_PHONE_GRANTED = true;
+                }
+        }
+
+        if (CALL_PHONE_GRANTED) {
+            callByPhone();
+        } else {
+            Toast.makeText(getActivity(), "Потрібно дозволити доступ до контактів", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -427,7 +472,7 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
                 openSendEmailFragment();
                 break;
             case R.id.detail_contact_phone:
-                callByPhone();
+                setPermission();
                 break;
             case R.id.detail_contact_linkedin:
                 openLinkedinProfile();

@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
@@ -33,6 +35,8 @@ public class SelectedContactFragment extends Fragment implements SelectedContact
     //View
     private RecyclerView recyclerView;
     private EditText searchEdit;
+    private RelativeLayout no_result_container;
+    private LinearLayout search_container;
 
     @Nullable
     @Override
@@ -52,6 +56,8 @@ public class SelectedContactFragment extends Fragment implements SelectedContact
     private void initView() {
         recyclerView = root.findViewById(R.id.selected_contact_recycler);
         searchEdit = root.findViewById(R.id.selected_contact_search_edit);
+        search_container = root.findViewById(R.id.selected_contact_search_container);
+        no_result_container = root.findViewById(R.id.selected_contact_no_result_container);
     }
 
     //Initialization Presenter
@@ -70,7 +76,16 @@ public class SelectedContactFragment extends Fragment implements SelectedContact
     //Method, which get Contact from presenter
     private void getDataFromPresenter() {
         contacts.addAll(presenter.getContact());
-        adapter.notifyDataSetChanged();
+        if (contacts.isEmpty()) {
+            no_result_container.setVisibility(View.VISIBLE);
+            search_container.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            no_result_container.setVisibility(View.GONE);
+            search_container.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     //Initialization TextChangeListener for search edit text

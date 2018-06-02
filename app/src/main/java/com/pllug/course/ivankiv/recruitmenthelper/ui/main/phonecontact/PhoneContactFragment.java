@@ -93,7 +93,7 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
             READ_CONTACTS_GRANTED = true;
         } else {
             //Call Compat Activity for set permission
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_READ_CONTACTS);
+            requestPermissions( new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_READ_CONTACTS);
         }
 
         //If permission allow
@@ -143,6 +143,7 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_CODE_READ_CONTACTS:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -153,7 +154,7 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
         if (READ_CONTACTS_GRANTED) {
             mTask.execute();
         } else {
-            Toast.makeText(getActivity(), "Требуется установить разрешения", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Потрібно дозволити доступ до контактів", Toast.LENGTH_LONG).show();
         }
     }
 

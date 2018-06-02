@@ -4,7 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:focusableInTouchMode="true">
+    <RelativeLayout
+        android:id="@+id/contact_list_no_result_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/contact_list_image_no_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_no_result"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/contact_list_image_no_result"
+            android:text="Не має контактів у базі даних!"
+            android:textColor="@color/primaryText"
+            android:textSize="25sp"
+            android:gravity="center"/>
+    </RelativeLayout>
     <LinearLayout
+        android:id="@+id/contact_list_search_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -21,5 +44,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contact_list_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 </LinearLayout>

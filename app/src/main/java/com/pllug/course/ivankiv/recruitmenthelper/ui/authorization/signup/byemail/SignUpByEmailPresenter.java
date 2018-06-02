@@ -28,15 +28,6 @@ public class SignUpByEmailPresenter implements SignUpByEmailContract.Presenter {
         userDao = db.userDao();
     }
 
-    //Show photo
-    @Override
-    public void showPhoto() {
-        Glide.with(view.getContext())
-                .asBitmap()
-                .load(view.getImageUri())
-                .into(view.getImageView());
-    }
-
     //Method for checking entered data
     @Override
     public boolean checkingEnterData() {

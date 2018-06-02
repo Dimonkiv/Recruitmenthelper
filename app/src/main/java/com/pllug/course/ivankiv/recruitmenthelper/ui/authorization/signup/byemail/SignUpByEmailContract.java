@@ -10,10 +10,6 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.model.User;
 public interface SignUpByEmailContract {
     interface View {
 
-        Uri getImageUri();
-
-        ImageView getImageView();
-
         Context getContext();
 
         User getUser();
@@ -22,8 +18,6 @@ public interface SignUpByEmailContract {
     }
 
     interface Presenter {
-
-        void showPhoto();
 
         boolean checkingEnterData();
     }
