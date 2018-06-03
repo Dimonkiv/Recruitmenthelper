@@ -563,7 +563,7 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
             presenter.setSkills(skillAdapter.getSkills());
             presenter.insertIntoDb();
             Toast.makeText(mContext, "Дані занесено успішно", Toast.LENGTH_SHORT).show();
-            fragment.setDataToMainActivity(fragmentName);
+            fragment.setDataToMainActivity("ContactList");
         }
     }
 

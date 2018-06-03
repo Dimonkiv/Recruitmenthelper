@@ -277,7 +277,7 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
         if (skillList != null) {
 
             //if is at least ane skill
-            if (skillList.get(0) != null && !skillList.get(0).getSkill().isEmpty()) {
+            if (skillList.get(0) != null && skillList.get(0).getSkill() != null) {
 
                 //If is one skill
                 //then set him into skillStr
