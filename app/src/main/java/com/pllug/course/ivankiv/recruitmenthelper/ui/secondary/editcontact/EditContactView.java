@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -54,7 +57,7 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     private EditText name, phone, email, linkedIn, jobOrUniversity, profession, advantages, disadvanteges, notes;
 
     //Varies
-    private String photoUri, experienceStr, fragmentName, typeOfEmploymentStr;
+    private String photoUri, fragmentName;
     private Long id, recruiterNotesId;
 
     //Adapter
@@ -82,6 +85,8 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         initToolbar();
         initDateListener();
         initJobInterestSpinner();
+        initEditTextWatcher();
+        initSpinnerWatcher();
 
     }
     //Initialization View
@@ -219,8 +224,11 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         onDatelistener = new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                date.setText(String.valueOf(dayOfMonth) + "." + String.valueOf(monthOfYear + 1)
-                        + "." + String.valueOf(year));
+                String dateStr = String.valueOf(dayOfMonth) + "." + String.valueOf(monthOfYear + 1)
+                        + "." + String.valueOf(year);
+                date.setText(dateStr);
+
+                presenter.setDateOfLatestConnect(dateStr);
             }
         };
     }
@@ -251,22 +259,14 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     //Method, which add editText for entering language, spinner for choosing language level
     // and imageButton for removing this fields, to languageRecyclerView
     private void addLanguageField() {
-        List<Language> languages = new ArrayList<>();
-        languages.addAll(languageEditTextAdapter.getLanguages());
-        languages.add(new Language());
-        languageEditTextAdapter.addAllLanguages(languages);
+        languageEditTextAdapter.addLanguageField();
         languageEditTextAdapter.notifyItemInserted(languageEditTextAdapter.getItemCount() - 1);
     }
 
     //Method which remove language field
     private void removeLanguageField(int position) {
-        List<Language> languages = new ArrayList<>();
-        languages.addAll(languageEditTextAdapter.getLanguages());
-        if(position < languages.size()){
-            languages.remove(position);
-            languageEditTextAdapter.addAllLanguages(languages);
-            languageEditTextAdapter.notifyItemRemoved(position);
-        }
+        languageEditTextAdapter.removeField(position);
+        languageEditTextAdapter.notifyItemRemoved(position);
     }
 
     //Initialization skill adapter
@@ -286,28 +286,21 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     //Method, which add editText for entering skill and imageButton for removing this field
     //to skillRecyclerView
     private void addSkillField() {
-        List<Skill> skills = new ArrayList<>();
-        skills.addAll(skillAdapter.getSkills());
-        skills.add(new Skill());
-        skillAdapter.addAllSkill(skills);
+        skillAdapter.addSkillField();
         skillAdapter.notifyItemInserted(skillAdapter.getItemCount() - 1);
     }
 
     //Method which remove skills field
     private void removeSkillField(int position) {
-        List<Skill> skills = new ArrayList<>();
-        skills.addAll(skillAdapter.getSkills());
-        if(position < skills.size()){
-            skills.remove(position);
-            skillAdapter.addAllSkill(skills);
-            skillAdapter.notifyItemRemoved(position);
-        }
+        skillAdapter.removeSkillField(position);
+        skillAdapter.notifyItemRemoved(position);
     }
 
     //Method, which set data from telephone book into edit form
     private void setContactDataFromPhoneBook(Contact contact) {
         if (contact.getPhotoUri() != null) {
             photoUri = contact.getPhotoUri();
+            presenter.setPhotoUri(photoUri);
             Glide.with(mContext)
                     .asBitmap()
                     .load(photoUri)
@@ -317,25 +310,202 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         }
 
         if (contact.getName() != null) {
+            presenter.setName(contact.getName());
             name.setText(contact.getName());
         }
 
         if (contact.getPhone() != null) {
+            presenter.setPhone(contact.getPhone());
             phone.setText(contact.getPhone());
         }
 
         if (contact.getEmail() != null) {
+            presenter.setEmail(contact.getEmail());
             email.setText(contact.getName());
         }
 
         if (contact.getLinkedInLink() != null) {
+            presenter.setLinkedInLink(contact.getLinkedInLink());
             linkedIn.setText(contact.getLinkedInLink());
         }
 
         if (contact.getDateOfLatestContact() != null) {
+            presenter.setDateOfLatestConnect(contact.getDateOfLatestContact());
             date.setText(contact.getDateOfLatestContact());
         }
 
+    }
+
+    //Initialization TextWatcher for edit text fields
+    private void initEditTextWatcher() {
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setPhone(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setEmail(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        linkedIn.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setLinkedInLink(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        profession.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setProfession(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        jobOrUniversity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setJobOrUniversity(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        advantages.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setAdvantages(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        disadvanteges.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setDisadvantages(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        notes.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                presenter.setNotes(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    //Initialization spinner watcher
+    private void initSpinnerWatcher() {
+        jobInterest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                presenter.setJobInterest(parentView.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                presenter.setJobInterest("Не працює");
+            }
+
+        });
     }
 
 
@@ -349,26 +519,26 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
                 showGallery();
                 break;
             case R.id.edit_contact_trainee_r_btn:
-                experienceStr = "trainee";
+                presenter.setExperience("trainee");
                 break;
             case R.id.edit_contact_junior_r_btn:
-                experienceStr = "junior";
+                presenter.setExperience("junior");
                 break;
             case R.id.edit_contact_middle_r_btn:
-                experienceStr = "middle";
+                presenter.setExperience("middle");
                 break;
             case R.id.edit_contact_senior_r_btn:
-                experienceStr = "senior";
+                presenter.setExperience("senior");
                 break;
             case R.id.edit_contact_tech_lead_r_btn:
-                experienceStr = "techLead";
+                presenter.setExperience("techLead");
                 break;
             case R.id.edit_contact_student_r_btn:
-                typeOfEmploymentStr = "Студент";
+                presenter.setTypeOfEmployment("Студент");
                 hideDeveloperFields();
                 break;
             case R.id.edit_contact_worker_r_btn:
-                typeOfEmploymentStr = "Працює";
+                presenter.setTypeOfEmployment("Працює");
                 showDeveloperFields();
                 break;
             case R.id.edit_contact_add_language:
@@ -389,7 +559,11 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     @Override
     public void onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sign_up_by_email_toolbar_send) {
-            Toast.makeText(mContext, "Send", Toast.LENGTH_SHORT).show();
+            presenter.setLanguages(languageEditTextAdapter.getLanguages());
+            presenter.setSkills(skillAdapter.getSkills());
+            presenter.insertIntoDb();
+            Toast.makeText(mContext, "Дані занесено успішно", Toast.LENGTH_SHORT).show();
+            fragment.setDataToMainActivity(fragmentName);
         }
     }
 
@@ -398,6 +572,8 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     public void setPhoto(String photoUri) {
         //Hide camera icon
         loadPhoto.setVisibility(View.GONE);
+
+        presenter.setPhotoUri(photoUri);
 
         //Show photo in imageVew
         Glide.with(mContext)

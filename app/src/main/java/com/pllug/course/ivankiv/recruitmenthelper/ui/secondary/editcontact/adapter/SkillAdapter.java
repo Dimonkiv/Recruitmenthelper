@@ -50,12 +50,17 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillHolder>
 
     @Override
     public void onBindViewHolder(@NonNull final SkillHolder holder, final int position) {
-        holder.skillEditText.setText("");
-        Log.d("skill - ", "" + position);
-        if (holder.skillEditText != null) {
-            initTypicalSkills();
+        Skill skill = skills.get(position);
 
-            holder.skillEditText.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, typicalSkills));
+        holder.skillEditText.setText("");
+
+        if (holder.skillEditText != null) {
+            initSkillAutoComplete(holder);
+
+
+            if (skill.getSkill() != null && !skill.getSkill().isEmpty()) {
+                holder.skillEditText.setText(skill.getSkill());
+            }
 
             holder.skillEditText.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -65,7 +70,9 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillHolder>
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    skills.get(position).setSkill(charSequence.toString());
+                    if (!charSequence.toString().isEmpty()) {
+                        skills.get(position).setSkill(charSequence.toString());
+                    }
                 }
 
                 @Override
@@ -83,9 +90,6 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillHolder>
             }
         });
 
-        if (holder.skillEditText != null) {
-            holder.skillEditText.setText(skills.get(holder.getAdapterPosition()).getSkill());
-        }
     }
 
     @Override
@@ -109,12 +113,22 @@ public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillHolder>
         notifyDataSetChanged();
     }
 
-    private void initTypicalSkills() {
+    public void addSkillField() {
+        skills.add(new Skill());
+    }
+
+    public void removeSkillField(int position) {
+        skills.remove(position);
+    }
+
+    private void initSkillAutoComplete(SkillHolder holder) {
         typicalSkills = new String[] {"Java", "Android", "Git", "Sql", "C", "C++", "Python", "Django", "Html", "Css"
                 , "JavaScript", "Jquery", "React", "AngularJs", "Angular 2", "Vue.js", "Backbone.js", "Ember.js", "Knockout.js", "Node.js"
                 , "Html5", "Css3", "C#", "Kotlin", "Room", "SQLite", "Retrofit", "Rest.API", ".NET", "objective c" , "swift"
                 , "Php", "Assembler", "Менеджмент", "Підбір персоналу", "Набір IT-персоналу", "Управління персоналом", "Android SDK"
                 , "Android NDK"};
+
+        holder.skillEditText.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, typicalSkills));
     }
 
     public class SkillHolder extends RecyclerView.ViewHolder{

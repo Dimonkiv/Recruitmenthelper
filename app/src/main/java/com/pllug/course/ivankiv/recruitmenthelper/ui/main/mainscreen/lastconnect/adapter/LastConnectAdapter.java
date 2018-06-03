@@ -44,7 +44,7 @@ public class LastConnectAdapter extends RecyclerView.Adapter<LastConnectAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Contact contact = contacts.get(position);
 
-        if (holder.photo != null && contact.getPhotoUri() != null) {
+        if (holder.photo != null && contact.getPhotoUri() != null && !contact.getPhotoUri().isEmpty()) {
             Glide.with(mContext)
                     .asBitmap()
                     .load(contact.getPhotoUri())

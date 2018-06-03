@@ -44,7 +44,7 @@ public class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContact
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final Contact contactItem = contactList.get(position);
 
-        if (holder.photo != null && contactItem.getPhotoUri() != null) {
+        if (holder.photo != null && contactItem.getPhotoUri() != null && !contactItem.getPhotoUri().isEmpty()) {
             Glide.with(mContext)
                     .asBitmap()
                     .load(contactItem.getPhotoUri())

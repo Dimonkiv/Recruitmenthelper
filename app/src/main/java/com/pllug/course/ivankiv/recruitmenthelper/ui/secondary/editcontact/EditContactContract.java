@@ -9,6 +9,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
+
+import java.util.List;
 
 interface EditContactContract {
 
@@ -26,14 +30,6 @@ interface EditContactContract {
     }
 
     interface Presenter {
-
-
-    }
-
-    interface Fragment {
-        void startActivityForResult(Intent intent);
-
-        void setDataToMainActivity(String fragmentName);
 
         //Set Contact data
         void setName(String name);
@@ -62,6 +58,25 @@ interface EditContactContract {
         void setAdvantages(String advantages);
 
         void setDisadvantages(String disadvantages);
+
+        void setNotes(String notes);
+
+        void setLanguages(List<Language> languages);
+
+        void setSkills(List<Skill> skills);
+
+        void setLanguage(Language language);
+
+        void setSkill(Skill skill);
+
+        boolean insertIntoDb();
+    }
+
+    interface Fragment {
+        void startActivityForResult(Intent intent);
+
+        void setDataToMainActivity(String fragmentName);
+
     }
 
 }

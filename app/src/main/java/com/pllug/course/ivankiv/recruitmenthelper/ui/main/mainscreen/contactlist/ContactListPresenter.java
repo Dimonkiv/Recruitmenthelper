@@ -6,8 +6,10 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.ContactDao;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.LanguageDao;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.RecruiterNotesDao;
 import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.SkillDao;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.ContactListItem;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.RecruiterNotes;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
 
 import java.util.List;

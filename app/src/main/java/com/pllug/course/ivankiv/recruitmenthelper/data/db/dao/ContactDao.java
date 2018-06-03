@@ -22,7 +22,7 @@ public interface ContactDao {
     @Query("SELECT * FROM Contact WHERE id = :id")
     Contact getById(long id);
 
-    @Query("SELECT * FROM Contact WHERE dateOfLatestContact IS NOT NULL ORDER BY dateOfLatestContact DESC")
+    @Query("SELECT * FROM Contact WHERE dateOfLatestContact IS NOT NULL AND dateOfLatestContact <> '' ORDER BY dateOfLatestContact DESC")
     List<Contact> getAllByDate();
 
 

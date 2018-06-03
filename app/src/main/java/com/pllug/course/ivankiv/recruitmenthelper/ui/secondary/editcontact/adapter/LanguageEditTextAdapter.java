@@ -3,10 +3,13 @@ package com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.adap
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -15,6 +18,7 @@ import android.widget.Spinner;
 
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.lastconnect.adapter.LastConnectAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,23 +49,63 @@ public class LanguageEditTextAdapter extends RecyclerView.Adapter<LanguageEditTe
 
     @Override
     public void onBindViewHolder(@NonNull final LanguageHolder holder, final int position) {
-        Language language = languages.get(position);
-        holder.editText.setText("");
-
-        Log.d("language - ", "" + position);
-        initLanguageLevelSpinner(holder.languageLevel);
+        final Language language = languages.get(position);
 
         if (holder.editText != null) {
-            String typicalLanguages[] = new String[]{"Українська", "Російська", "Польська", "Німецька", "Англійська", "Французька"};
-            holder.editText.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, typicalLanguages));
+            holder.editText.setText("");
+            initLanguageAutoComplete(holder);
+
+            //Set language to Language EditText
+            if (language.getLanguage() != null && !language.getLanguage().isEmpty()) {
+                holder.editText.setText(language.getLanguage());
+            }
+
+            //Language text watcher
+            holder.editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!s.toString().isEmpty()) {
+                        languages.get(position).setLanguage(s.toString());
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
         }
 
-        if (holder.editText != null) {
-            holder.editText.setText(language.getLanguage());
-        }
 
-        if (holder.languageLevel != null && language.getLanguageLevel() != null) {
-            holder.languageLevel.setSelection(getPosLanguageLevel(language.getLanguageLevel()));
+
+
+        if (holder.languageLevel != null) {
+            initLanguageLevelSpinner(holder.languageLevel);
+
+
+            if (language.getLanguageLevel() != null && !language.getLanguageLevel().isEmpty()) {
+                holder.languageLevel.setSelection(getPosLanguageLevel(language.getLanguageLevel()));
+            } else {
+                language.setLanguageLevel("A1");
+            }
+
+            //Language Level Spinner Watcher
+            holder.languageLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    language.setLanguageLevel(parentView.getItemAtPosition(position).toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                }
+
+            });
         }
 
         holder.btn.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +157,11 @@ public class LanguageEditTextAdapter extends RecyclerView.Adapter<LanguageEditTe
         languageLevel.setAdapter(adapter);
     }
 
+    private void initLanguageAutoComplete(LanguageHolder holder) {
+        String typicalLanguages[] = new String[]{"Українська", "Російська", "Польська", "Німецька", "Англійська", "Французька"};
+        holder.editText.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, typicalLanguages));
+    }
+
     @Override
     public int getItemCount() {
         return languages.size();
@@ -132,6 +181,14 @@ public class LanguageEditTextAdapter extends RecyclerView.Adapter<LanguageEditTe
         }
 
         notifyDataSetChanged();
+    }
+
+    public void addLanguageField() {
+        languages.add(new Language());
+    }
+
+    public void removeField(int position) {
+        languages.remove(position);
     }
 
 
