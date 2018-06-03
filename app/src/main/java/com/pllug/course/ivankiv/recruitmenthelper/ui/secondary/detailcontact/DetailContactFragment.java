@@ -176,7 +176,11 @@ public class DetailContactFragment extends Fragment implements DetailContactCont
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((SecondaryActivity) getActivity()).goToMainActivity(fragmentName);
+                if (fragmentName.equals("DetailContact")) {
+                    ((SecondaryActivity) getActivity()).goToMainActivity("ContactList");
+                } else {
+                    ((SecondaryActivity) getActivity()).goToMainActivity(fragmentName);
+                }
             }
         });
     }

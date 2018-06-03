@@ -82,8 +82,17 @@ public class EditContactFragment extends Fragment implements EditContactContract
             if (fragmentName.equals("PhoneContactFragment")) {
                 view.setContact((Contact)bundle.getSerializable("contact"));
                 view.setFragmentName(fragmentName);
+            } else if(fragmentName.equals("DetailContact") || fragmentName.equals("ContactListEditBtn")){
+                view.setId(bundle.getLong("id"));
+                view.setRecruiterNotesId(bundle.getLong("recruiterNotesId"));
+                view.setFragmentName(fragmentName);
             }
         }
+    }
+
+    //Method which show DetailContactFragment
+    public void showDetailContactFragment(long id, long recruiterNotesId, String fragmentName) {
+        ((SecondaryActivity)getActivity()).showDetailContactFragment(id, recruiterNotesId, fragmentName);
     }
 
     //Set icon-button allow

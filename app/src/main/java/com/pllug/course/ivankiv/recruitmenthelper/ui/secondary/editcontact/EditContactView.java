@@ -165,7 +165,11 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               fragment.setDataToMainActivity(fragmentName);
+                if (fragmentName.equals("PhoneContactFragment") || fragmentName.equals("ContactListEditBtn")) {
+                    fragment.setDataToMainActivity(fragmentName);
+                } else {
+                    fragment.showDetailContactFragment(id, recruiterNotesId, fragmentName);
+                }
             }
         });
     }
@@ -593,5 +597,15 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     @Override
     public void setFragmentName(String fragmentName) {
         this.fragmentName = fragmentName;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Override
+    public void setRecruiterNotesId(long recruiterNotesId) {
+        this.recruiterNotesId = recruiterNotesId;
     }
 }

@@ -27,6 +27,10 @@ interface EditContactContract {
         void setContact(Contact contact);
 
         void setFragmentName(String fragmentName);
+
+        void setId(long id);
+
+        void setRecruiterNotesId(long recruiterNotesId);
     }
 
     interface Presenter {
