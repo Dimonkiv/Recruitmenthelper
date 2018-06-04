@@ -88,7 +88,9 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         initEditTextWatcher();
         initSpinnerWatcher();
 
+
     }
+
     //Initialization View
     private void initView() {
 
@@ -298,6 +300,127 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     private void removeSkillField(int position) {
         skillAdapter.removeSkillField(position);
         skillAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    //Method which setData into fields
+    public void setDataFromDBIntoFields() {
+        if (!fragmentName.equals("PhoneContactFragment")) {
+            loadDataFromDB();
+            setContactDataFromDB();
+            setRecruiterNotesDataFromDB();
+            setLanguagesDataFromDB();
+            setSkillsDataFromDB();
+        }
+    }
+
+    //Method which load data from db
+    private void loadDataFromDB() {
+        presenter.loadContact(id);
+        presenter.loadRecruiterNotes(recruiterNotesId);
+        presenter.loadLanguages(recruiterNotesId);
+        presenter.loadSkills(recruiterNotesId);
+    }
+
+    //Method which set contact data from db into contact fields
+    private void setContactDataFromDB() {
+        if (presenter.getName() != null) {
+            name.setText(presenter.getName());
+        }
+
+        if (presenter.getPhone() != null) {
+            phone.setText(presenter.getPhone());
+        }
+
+        if (presenter.getEmail() != null) {
+            email.setText(presenter.getEmail());
+        }
+
+        if (presenter.getLinkedInLink() != null) {
+            linkedIn.setText(presenter.getLinkedInLink());
+        }
+
+        if (presenter.getDateOfLatestConnect() != null) {
+            date.setText(presenter.getDateOfLatestConnect());
+        }
+
+        if (presenter.getPhotoUri() != null) {
+            Glide.with(mContext)
+                    .load(presenter.getPhotoUri())
+                    .into(photo);
+        }
+    }
+
+    //Method which set recruiter notes data from db into recruiter notes fields
+    private void setRecruiterNotesDataFromDB() {
+        boolean isWorker = false;
+        if (presenter.getTypeOfEmployment() != null) {
+            if (presenter.getTypeOfEmployment().equals("Працює")) {
+                workRBtn.setChecked(true);
+                showDeveloperFields();
+                isWorker = true;
+            } else {
+                studentRBtn.setChecked(true);
+                hideDeveloperFields();
+            }
+        }
+
+        if (isWorker) {
+            if (presenter.getProfession() != null) {
+                profession.setText(presenter.getProfession());
+            }
+
+
+            if (presenter.getExperience() != null) {
+                switch (presenter.getExperience()) {
+                    case "trainee":
+                        traineeRBtn.setChecked(true);
+                        break;
+                    case "junior":
+                        juniorRBtn.setChecked(true);
+                        break;
+                    case "middle":
+                        middleRBtn.setChecked(true);
+                        break;
+                    case "senior":
+                        seniorRBtn.setChecked(true);
+                        break;
+                    case "techLead":
+                        techLeadRBtn.setChecked(true);
+                        break;
+                }
+            }
+        }
+
+        if (presenter.getJobOrUniversity() != null) {
+            jobOrUniversity.setText(presenter.getJobOrUniversity());
+        }
+
+        if (presenter.getJobInterest() != null) {
+            jobInterest.setSelection(presenter.getJobInterestItemId(presenter.getJobInterest()));
+        }
+
+        if (presenter.getAdvantages() != null) {
+            advantages.setText(presenter.getAdvantages());
+        }
+
+        if (presenter.getDisadvantages() != null) {
+            disadvanteges.setText(presenter.getDisadvantages());
+        }
+
+        if (presenter.getNotes() != null) {
+            notes.setText(presenter.getNotes());
+        }
+    }
+
+    //Method which set languages data from db into language fields
+    private void setLanguagesDataFromDB() {
+        languageEditTextAdapter.addAllLanguages(presenter.getLanguages());
+    }
+
+    //Method which set skills data from db into skills fields
+    private void setSkillsDataFromDB() {
+        skillAdapter.addAllSkill(presenter.getSkills());
     }
 
     //Method, which set data from telephone book into edit form

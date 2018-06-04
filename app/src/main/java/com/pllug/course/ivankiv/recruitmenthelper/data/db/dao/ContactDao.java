@@ -30,7 +30,7 @@ public interface ContactDao {
     Contact getByRecruiterId(long recruiterNotesId);
 
     @Query("SELECT Contact.id, Contact.name, Contact.photoUri, Contact.recruiterNotesId,RecruiterNotes.typeOfEmployment ,RecruiterNotes.profession, RecruiterNotes.jobInterests " +
-            "FROM Contact, RecruiterNotes WHERE recruiterNotes.id == Contact.recruiterNotesId")
+            "FROM Contact, RecruiterNotes WHERE recruiterNotes.id == Contact.recruiterNotesId ORDER BY Contact.id DESC")
     List<ContactListItem> getContactWithNotes();
 
     @Insert

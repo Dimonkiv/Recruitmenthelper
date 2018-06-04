@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.RecruiterNotes;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
 
 import java.util.List;
@@ -31,6 +32,8 @@ interface EditContactContract {
         void setId(long id);
 
         void setRecruiterNotesId(long recruiterNotesId);
+
+        void setDataFromDBIntoFields();
     }
 
     interface Presenter {
@@ -73,7 +76,53 @@ interface EditContactContract {
 
         void setSkill(Skill skill);
 
+        //Get methods for contact
+        String getName();
+
+        String getPhone();
+
+        String getEmail();
+
+        String getLinkedInLink();
+
+        String getDateOfLatestConnect();
+
+        String getPhotoUri();
+
+        //Get methods for RecruiterNotesData
+        String getTypeOfEmployment();
+
+        String getProfession();
+
+        String getExperience();
+
+        String getJobOrUniversity();
+
+        String getJobInterest();
+
+        String getAdvantages();
+
+        String getDisadvantages();
+
+        String getNotes();
+
+        List<Language> getLanguages();
+
+        List<Skill> getSkills();
+
+        //Load data from database
+        void loadContact(long id);
+
+        void loadRecruiterNotes(long recruiterNotesId);
+
+        void loadLanguages(long recruiterNotesId);
+
+        void loadSkills(long recruiterNotesId);
+
+        //logic
         boolean insertIntoDb();
+
+        int getJobInterestItemId(String jobInterest);
     }
 
     interface Fragment {

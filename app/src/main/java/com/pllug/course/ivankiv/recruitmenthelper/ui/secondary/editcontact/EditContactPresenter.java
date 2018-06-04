@@ -185,7 +185,7 @@ public class EditContactPresenter implements EditContactContract.Presenter {
 
     @Override
     public void setJobOrUniversity(String jobOrUniversity) {
-        recruiterNotes.setJobInterests(jobOrUniversity);
+        recruiterNotes.setJobOrUniversity(jobOrUniversity);
     }
 
     @Override
@@ -237,7 +237,184 @@ public class EditContactPresenter implements EditContactContract.Presenter {
         return true;
     }
 
+    @Override
+    public int getJobInterestItemId(String jobInterest) {
+        int jobInterestId = 0;
 
+        switch(jobInterest) {
+            case "Не працює":
+                jobInterestId = 0;
+                break;
+            case "Працює":
+                jobInterestId = 1;
+                break;
+            case "Шукає роботу":
+                jobInterestId = 2;
+                break;
+            case "Зацікавлений в нових можливостях":
+                jobInterestId = 3;
+                break;
+
+        }
+
+        return jobInterestId;
+    }
+
+    @Override
+    public String getName() {
+        if (contact != null) {
+            return contact.getName();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getPhone() {
+        if (contact != null) {
+            return contact.getPhone();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getEmail() {
+        if (contact != null) {
+            return contact.getEmail();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getLinkedInLink() {
+        if (contact != null) {
+            return contact.getLinkedInLink();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getDateOfLatestConnect() {
+        if (contact != null) {
+            return contact.getDateOfLatestContact();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getPhotoUri() {
+        if (contact != null) {
+            return contact.getPhotoUri();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getTypeOfEmployment() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getTypeOfEmployment();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getProfession() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getProfession();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getExperience() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getExperience();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getJobOrUniversity() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getJobOrUniversity();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getJobInterest() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getJobInterests();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getAdvantages() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getAdvantages();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getDisadvantages() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getDisadvantages();
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getNotes() {
+        if (recruiterNotes != null) {
+            return recruiterNotes.getNotes();
+        }
+
+        return "";
+    }
+
+    @Override
+    public List<Language> getLanguages() {
+        return languages;
+    }
+
+    @Override
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    @Override
+    public void loadContact(long id) {
+        contact = contactDao.getById(id);
+    }
+
+    @Override
+    public void loadRecruiterNotes(long recruiterNotesId) {
+        recruiterNotes = recruiterNotesDao.getById(recruiterNotesId);
+    }
+
+    @Override
+    public void loadLanguages(long recruiterNotesId) {
+        languages = languageDao.getAllByRecruiterNotesId(recruiterNotesId);
+    }
+
+    @Override
+    public void loadSkills(long recruiterNotesId) {
+        skills = skillDao.getAllByRecruiterNotesId(recruiterNotesId);
+    }
 
 
 }

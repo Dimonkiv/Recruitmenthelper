@@ -86,6 +86,7 @@ public class EditContactFragment extends Fragment implements EditContactContract
                 view.setId(bundle.getLong("id"));
                 view.setRecruiterNotesId(bundle.getLong("recruiterNotesId"));
                 view.setFragmentName(fragmentName);
+                view.setDataFromDBIntoFields();
             }
         }
     }
