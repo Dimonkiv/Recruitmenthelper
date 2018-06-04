@@ -24,8 +24,8 @@ public class EditContactPresenter implements EditContactContract.Presenter {
     private SkillDao skillDao;
     private Contact contact;
     private RecruiterNotes recruiterNotes;
-    private List<Language> languages;
-    private List<Skill> skills;
+    private List<Language> languages, newLanguages;
+    private List<Skill> skills, newSkills;
 
 
     EditContactPresenter() {
@@ -48,6 +48,8 @@ public class EditContactPresenter implements EditContactContract.Presenter {
         recruiterNotes = new RecruiterNotes();
         languages = new ArrayList<>();
         skills = new ArrayList<>();
+        newLanguages = new ArrayList<>();
+        newSkills = new ArrayList<>();
     }
 
     //Method which check entered data
@@ -120,20 +122,20 @@ public class EditContactPresenter implements EditContactContract.Presenter {
     }
 
     //Method which insert skills
-    private void insertLanguages(long recuiterId) {
-        for (Language language : languages) {
+    private void insertLanguages(long recruiterId) {
+        for (Language language : newLanguages) {
             if(language.getLanguageLevel() == null) {
                 language.setLanguageLevel("A1");
             }
-            language.setRecruiterNotesId(recuiterId);
+            language.setRecruiterNotesId(recruiterId);
             languageDao.insert(language);
         }
     }
 
     //Method which insert skills
-    private void insertSkills(long recuiterId) {
-        for (Skill skill : skills) {
-            skill.setRecruiterNotesId(recuiterId);
+    private void insertSkills(long recruiterId) {
+        for (Skill skill : newSkills) {
+            skill.setRecruiterNotesId(recruiterId);
             skillDao.insert(skill);
         }
     }
@@ -210,31 +212,127 @@ public class EditContactPresenter implements EditContactContract.Presenter {
 
     @Override
     public void setLanguages(List<Language> languages) {
-        this.languages.clear();
-        this.languages.addAll(languages);
+        this.newLanguages.clear();
+        this.newLanguages.addAll(languages);
     }
 
     @Override
     public void setSkills(List<Skill> skills) {
-        this.skills.clear();
-        this.skills.addAll(skills);
+        this.newSkills.clear();
+        this.newSkills.addAll(skills);
     }
 
     @Override
     public void setLanguage(Language language) {
-        languages.add(language);
+        newLanguages.add(language);
     }
 
     @Override
     public void setSkill(Skill skill) {
-        skills.add(skill);
+        newSkills.add(skill);
     }
 
     @Override
-    public boolean insertIntoDb() {
+    public void insertIntoDb() {
         checkedEnteredData();
         insertCheckedDataIntoDB();
-        return true;
+    }
+
+    @Override
+    public void updateDataInDB(long id, long recruiterNotesId) {
+        updateContact(id);
+        updateRecruiterNotes(recruiterNotesId);
+        updateLanguages(recruiterNotesId);
+        updateSkills(recruiterNotesId);
+    }
+
+    //Method which update Contact
+    private void updateContact(long id) {
+        if (contact != null) {
+            contactDao.update(contact);
+        }
+    }
+
+    //Method which update RecruiterNotes
+    private void updateRecruiterNotes(long recruiterNotesId) {
+        if (recruiterNotes != null) {
+            recruiterNotesDao.update(recruiterNotes);
+        }
+    }
+
+    //Method which update Languages
+    private void updateLanguages(long recruiterNotesId) {
+        int i = 0;
+        for (Language language : newLanguages) {
+            language.setRecruiterNotesId(recruiterNotesId);
+
+            if (i < languages.size()) {
+                languageDao.update(language);
+            } else {
+                languageDao.insert(language);
+            }
+
+            i++;
+        }
+
+        if (newLanguages.size() < languages.size()) {
+            removeRemovedLanguagesFromDB();
+        }
+    }
+
+    //method which delete languages which was deleted in adapter during updating date
+    private void removeRemovedLanguagesFromDB() {
+        int i = 0;
+
+        for (Language language : languages) {
+            if(i < newLanguages.size()) {
+                if (!language.equals(newLanguages.get(i))) {
+                    languageDao.delete(language);
+                    i--;
+                }
+
+                i++;
+            } else {
+                languageDao.delete(language);
+            }
+        }
+    }
+
+    //Method which update Skills
+    private void updateSkills(long recruiterNotesId) {
+        int i = 0;
+        for (Skill skill : newSkills) {
+            skill.setRecruiterNotesId(recruiterNotesId);
+
+            if (i < skills.size()) {
+                skillDao.update(skill);
+            } else {
+                skillDao.insert(skill);
+            }
+
+            i++;
+        }
+
+        if (newSkills.size() < skills.size()) {
+            removeRemovedSkillsFromDB();
+        }
+    }
+
+    //method which delete languages which was deleted in adapter during updating date
+    private void removeRemovedSkillsFromDB() {
+        int i = 0;
+
+        for (Skill skill : skills) {
+            if (i < newSkills.size()) {
+                if (!skill.equals(newSkills.get(i))) {
+                    skillDao.delete(skill);
+                    i--;
+                }
+                i++;
+            } else {
+                skillDao.delete(skill);
+            }
+        }
     }
 
     @Override

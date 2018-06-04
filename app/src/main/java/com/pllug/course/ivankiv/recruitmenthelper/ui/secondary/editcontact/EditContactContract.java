@@ -120,7 +120,9 @@ interface EditContactContract {
         void loadSkills(long recruiterNotesId);
 
         //logic
-        boolean insertIntoDb();
+        void insertIntoDb();
+
+        void updateDataInDB(long id, long recruiterNotesId);
 
         int getJobInterestItemId(String jobInterest);
     }

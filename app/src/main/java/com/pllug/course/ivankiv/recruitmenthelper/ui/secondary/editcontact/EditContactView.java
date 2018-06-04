@@ -688,9 +688,20 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         if (item.getItemId() == R.id.sign_up_by_email_toolbar_send) {
             presenter.setLanguages(languageEditTextAdapter.getLanguages());
             presenter.setSkills(skillAdapter.getSkills());
-            presenter.insertIntoDb();
-            Toast.makeText(mContext, "Дані занесено успішно", Toast.LENGTH_SHORT).show();
-            fragment.setDataToMainActivity("ContactList");
+
+            if (fragmentName.equals("PhoneContactFragment")) {
+                presenter.insertIntoDb();
+                Toast.makeText(mContext, "Дані занесено успішно", Toast.LENGTH_SHORT).show();
+                fragment.setDataToMainActivity("ContactList");
+            } else if(fragmentName.equals("DetailContact")) {
+                presenter.updateDataInDB(id, recruiterNotesId);
+                Toast.makeText(mContext, "Дані оновлено", Toast.LENGTH_SHORT).show();
+                fragment.showDetailContactFragment(id, recruiterNotesId, fragmentName);
+            } else {
+                presenter.updateDataInDB(id, recruiterNotesId);
+                Toast.makeText(mContext, "Дані оновлено", Toast.LENGTH_SHORT).show();
+                fragment.setDataToMainActivity("ContactList");
+            }
         }
     }
 
