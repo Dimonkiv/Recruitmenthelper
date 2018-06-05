@@ -1,16 +1,11 @@
 package com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact;
 
-
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.RecruiterNotes;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
 
 import java.util.List;
@@ -23,22 +18,62 @@ interface EditContactContract {
 
         void onOptionsItemSelected(MenuItem item);
 
-        void setPhoto(String photoUri);
+        void showPhone(String phone);
 
-        void setContact(Contact contact);
+        void showEmail(String email);
 
-        void setFragmentName(String fragmentName);
+        void showLinkedInLink(String linkedInLink);
 
-        void setId(long id);
+        void showName(String name);
 
-        void setRecruiterNotesId(long recruiterNotesId);
+        void showDateOfLatestContact(String dateOfLatestContact);
 
-        void setDataFromDBIntoFields();
+        void showPhoto(String photoUri);
+
+        void setStudentRadioButton();
+
+        void setWorkRadioButton();
+
+        void showProfession(String profession);
+
+        void setTraineeRadioButton();
+
+        void setJuniorRadioButton();
+
+        void setMiddleRadioButton();
+
+        void setSeniorRadioButton();
+
+        void setTechLeadRadioButton();
+
+        void showJobOrUniversity(String jobOrUniversity);
+
+        void setJobInterestSpinnerItem(int position);
+
+        void showAdvantages(String advantages);
+
+        void showDisadvantages(String disadvantages);
+
+        void showNotes(String notes);
+
+        void showLanguages(List<Language> languages);
+
+        void showSkills(List<Skill> skills);
+
+        void showDeveloperFields();
+
+        void hideDeveloperFields();
+
+        void showToast(String message);
+
     }
 
     interface Presenter {
 
-        //Set Contact data
+        void setContact(Contact contact);
+
+        void setId(long id);
+
         void setName(String name);
 
         void setPhone(String phone);
@@ -51,7 +86,8 @@ interface EditContactContract {
 
         void setPhotoUri(String photoUri);
 
-        //set RecruiterNotesData
+        void setRecruiterNotesId(long recruiterNotesId);
+
         void setTypeOfEmployment(String typeOfEmployment);
 
         void setProfession(String profession);
@@ -76,61 +112,30 @@ interface EditContactContract {
 
         void setSkill(Skill skill);
 
-        //Get methods for contact
-        String getName();
+        long getId();
 
-        String getPhone();
+        long getRecruiterNotesId();
 
-        String getEmail();
+        void loadData();
 
-        String getLinkedInLink();
+        void showContact();
 
-        String getDateOfLatestConnect();
+        void setFragmentName(String fragmentName);
 
-        String getPhotoUri();
+        void onClickSentButton();
 
-        //Get methods for RecruiterNotesData
-        String getTypeOfEmployment();
+        void onBackButtonClick();
 
-        String getProfession();
+        void setView(EditContactContract.View view);
 
-        String getExperience();
-
-        String getJobOrUniversity();
-
-        String getJobInterest();
-
-        String getAdvantages();
-
-        String getDisadvantages();
-
-        String getNotes();
-
-        List<Language> getLanguages();
-
-        List<Skill> getSkills();
-
-        //Load data from database
-        void loadContact(long id);
-
-        void loadRecruiterNotes(long recruiterNotesId);
-
-        void loadLanguages(long recruiterNotesId);
-
-        void loadSkills(long recruiterNotesId);
-
-        //logic
-        void insertIntoDb();
-
-        void updateDataInDB(long id, long recruiterNotesId);
-
-        int getJobInterestItemId(String jobInterest);
     }
 
     interface Fragment {
-        void startActivityForResult(Intent intent);
+        void startActivityForResult();
 
         void setDataToMainActivity(String fragmentName);
+
+        void showDetailContactFragment(long id, long recruiterNotesId, String fragmentName);
 
     }
 

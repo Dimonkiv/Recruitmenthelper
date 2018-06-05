@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/circle_white_background"
+        android:src="@drawable/header_photo"
         />
 
     <LinearLayout
@@ -25,14 +25,14 @@
             android:id="@+id/header_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Max"
+            android:text="Каріна"
             android:textColor="@android:color/white"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/header_lastname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ignativ"
+            android:text="Волковецька"
             android:layout_marginLeft="3dp"
             android:textColor="@android:color/white"
             android:textStyle="bold"/>
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="dima@gmail.com"
+        android:text="karina@gmail.com"
         android:layout_marginLeft="5dp"
         android:textColor="@android:color/white" />
 

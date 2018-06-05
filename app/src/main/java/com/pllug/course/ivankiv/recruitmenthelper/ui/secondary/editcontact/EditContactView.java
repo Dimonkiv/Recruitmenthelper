@@ -2,7 +2,6 @@ package com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.SecondaryActivity;
@@ -36,7 +33,6 @@ import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.adapt
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.adapter.SkillAdapter;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.editcontact.datepicker.DatePickerFragment;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -52,32 +48,28 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
     private Spinner jobInterest;
     private TextView date;
     private RecyclerView languageRecycler, skillRecycler;
-    private RadioGroup experience_group, type_of_employment_group;
     private RadioButton traineeRBtn, juniorRBtn, middleRBtn, seniorRBtn, techLeadRBtn, studentRBtn, workRBtn;
     private EditText name, phone, email, linkedIn, jobOrUniversity, profession, advantages, disadvanteges, notes;
 
-    //Varies
-    private String photoUri, fragmentName;
-    private Long id, recruiterNotesId;
 
     //Adapter
     private LanguageEditTextAdapter languageEditTextAdapter;
     private SkillAdapter skillAdapter;
 
     //Other
-    private DatePickerDialog.OnDateSetListener onDatelistener;
+    private DatePickerDialog.OnDateSetListener onDateListener;
     private EditContactFragment fragment;
     private EditContactPresenter presenter;
     private Context mContext;
     private View root;
 
 
-
-    public EditContactView(EditContactFragment fragment, EditContactPresenter presenter, Context mContext, View root) {
+    EditContactView(EditContactFragment fragment, EditContactPresenter presenter, Context mContext, View root) {
         this.fragment = fragment;
         this.presenter = presenter;
         this.mContext = mContext;
         this.root = root;
+        presenter.setView(this);
         initView();
         initLanguageAdapter();
         initSkillAdapter();
@@ -91,6 +83,7 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
 
     }
 
+    /*-------------------------------------------Initialization-----------------------------------*/
     //Initialization View
     private void initView() {
 
@@ -111,7 +104,6 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         disadvanteges = root.findViewById(R.id.edit_contact_disadvantages);
         notes = root.findViewById(R.id.edit_contact_notes);
 
-
         languageRecycler = root.findViewById(R.id.edit_contact_language_container);
         addLanguage = root.findViewById(R.id.edit_contact_add_language);
 
@@ -120,10 +112,6 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
 
         profession = root.findViewById(R.id.edit_contact_profession);
         jobInterest = root.findViewById(R.id.edit_contact_job_interest);
-
-
-        experience_group = root.findViewById(R.id.edit_contact_experience_group);
-        type_of_employment_group = root.findViewById(R.id.edit_contact_type_of_employment_group);
 
         traineeRBtn = root.findViewById(R.id.edit_contact_trainee_r_btn);
         juniorRBtn = root.findViewById(R.id.edit_contact_junior_r_btn);
@@ -159,7 +147,9 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         ((SecondaryActivity) mContext).setSupportActionBar(toolbar);
 
         //Set title
+
         ((SecondaryActivity) mContext).getSupportActionBar().setTitle("Редагування контакту");
+
         fragment.setHasOptionsMenu(true);
         //Set back button
         toolbar.setNavigationIcon(R.drawable.icon_back);
@@ -167,18 +157,9 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fragmentName.equals("PhoneContactFragment") || fragmentName.equals("ContactListEditBtn")) {
-                    fragment.setDataToMainActivity(fragmentName);
-                } else {
-                    fragment.showDetailContactFragment(id, recruiterNotesId, fragmentName);
-                }
+                presenter.onBackButtonClick();
             }
         });
-    }
-
-    //Method, which show image for image container
-    private void showImagePen() {
-        image_pen.setVisibility(View.VISIBLE);
     }
 
     //Initialization JobInterest Spinner
@@ -186,26 +167,14 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         String[] jobInterests = {"Не працює", "Працює", "Шукає роботу", "Зацікавлений в нових можливостях"};
 
         //Set adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, jobInterests);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, jobInterests);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         jobInterest.setAdapter(adapter);
     }
 
-    //Method, which hide profession_edit_text, container for position radio button and experience_edit_text
-    private void hideDeveloperFields() {
-        jobOrUniversity.setHint("Місце навчання");
-        profession.setVisibility(View.GONE);
-        experience_container.setVisibility(View.GONE);
-    }
 
-    //Method, which show profession_edit_text, container for position radio button and experience_edit_text
-    private void showDeveloperFields() {
-        jobOrUniversity.setHint("Місце роботи");
-        profession.setVisibility(View.VISIBLE);
-        experience_container.setVisibility(View.VISIBLE);
-    }
-
+    /*-----------------------------------------DatePicker-----------------------------------------*/
     //Method, which show DatePickerDialog
     private void showDatePicker() {
         final DatePickerFragment datePicker = new DatePickerFragment();
@@ -219,15 +188,18 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         datePicker.setArguments(args);
 
         //Set callback to capture selected date
-        datePicker.setCallBack(onDatelistener);
-        datePicker.show(fragment.getFragmentManager(), "Date Picker");
+        datePicker.setCallBack(onDateListener);
+
+        if (fragment.getFragmentManager() != null) {
+            datePicker.show(fragment.getFragmentManager(), "Date Picker");
+        }
 
 
     }
 
     //Initialization DatePickerListener
     private void initDateListener() {
-        onDatelistener = new DatePickerDialog.OnDateSetListener() {
+        onDateListener = new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 String dateStr = String.valueOf(dayOfMonth) + "." + String.valueOf(monthOfYear + 1)
@@ -241,14 +213,11 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
 
     //Method for choices photo from system gallery
     private void showGallery() {
-        //Open system gallery
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        //Type of received object - image
-        photoPickerIntent.setType("image/*");
-        //Start activity for result
-        fragment.startActivityForResult(photoPickerIntent);
+        fragment.startActivityForResult();
     }
 
+
+    /*---------------------------------------Language Adapter-------------------------------------*/
     //Initialization language adapter
     private void initLanguageAdapter() {
         languageEditTextAdapter = new LanguageEditTextAdapter(mContext, new LanguageEditTextAdapter.LanguageAdapterListener() {
@@ -275,6 +244,8 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         languageEditTextAdapter.notifyItemRemoved(position);
     }
 
+
+    /*--------------------------------------Skill Adapter-----------------------------------------*/
     //Initialization skill adapter
     private void initSkillAdapter() {
         skillAdapter = new SkillAdapter(mContext, new SkillAdapter.SkillAdapterListener() {
@@ -302,167 +273,8 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         skillAdapter.notifyItemRemoved(position);
     }
 
-    @Override
-    //Method which setData into fields
-    public void setDataFromDBIntoFields() {
-        if (!fragmentName.equals("PhoneContactFragment")) {
-            loadDataFromDB();
-            setContactDataFromDB();
-            setRecruiterNotesDataFromDB();
-            setLanguagesDataFromDB();
-            setSkillsDataFromDB();
-        }
-    }
 
-    //Method which load data from db
-    private void loadDataFromDB() {
-        presenter.loadContact(id);
-        presenter.loadRecruiterNotes(recruiterNotesId);
-        presenter.loadLanguages(recruiterNotesId);
-        presenter.loadSkills(recruiterNotesId);
-    }
-
-    //Method which set contact data from db into contact fields
-    private void setContactDataFromDB() {
-        if (presenter.getName() != null) {
-            name.setText(presenter.getName());
-        }
-
-        if (presenter.getPhone() != null) {
-            phone.setText(presenter.getPhone());
-        }
-
-        if (presenter.getEmail() != null) {
-            email.setText(presenter.getEmail());
-        }
-
-        if (presenter.getLinkedInLink() != null) {
-            linkedIn.setText(presenter.getLinkedInLink());
-        }
-
-        if (presenter.getDateOfLatestConnect() != null) {
-            date.setText(presenter.getDateOfLatestConnect());
-        }
-
-        if (presenter.getPhotoUri() != null) {
-            Glide.with(mContext)
-                    .load(presenter.getPhotoUri())
-                    .into(photo);
-        }
-    }
-
-    //Method which set recruiter notes data from db into recruiter notes fields
-    private void setRecruiterNotesDataFromDB() {
-        boolean isWorker = false;
-        if (presenter.getTypeOfEmployment() != null) {
-            if (presenter.getTypeOfEmployment().equals("Працює")) {
-                workRBtn.setChecked(true);
-                showDeveloperFields();
-                isWorker = true;
-            } else {
-                studentRBtn.setChecked(true);
-                hideDeveloperFields();
-            }
-        }
-
-        if (isWorker) {
-            if (presenter.getProfession() != null) {
-                profession.setText(presenter.getProfession());
-            }
-
-
-            if (presenter.getExperience() != null) {
-                switch (presenter.getExperience()) {
-                    case "trainee":
-                        traineeRBtn.setChecked(true);
-                        break;
-                    case "junior":
-                        juniorRBtn.setChecked(true);
-                        break;
-                    case "middle":
-                        middleRBtn.setChecked(true);
-                        break;
-                    case "senior":
-                        seniorRBtn.setChecked(true);
-                        break;
-                    case "techLead":
-                        techLeadRBtn.setChecked(true);
-                        break;
-                }
-            }
-        }
-
-        if (presenter.getJobOrUniversity() != null) {
-            jobOrUniversity.setText(presenter.getJobOrUniversity());
-        }
-
-        if (presenter.getJobInterest() != null) {
-            jobInterest.setSelection(presenter.getJobInterestItemId(presenter.getJobInterest()));
-        }
-
-        if (presenter.getAdvantages() != null) {
-            advantages.setText(presenter.getAdvantages());
-        }
-
-        if (presenter.getDisadvantages() != null) {
-            disadvanteges.setText(presenter.getDisadvantages());
-        }
-
-        if (presenter.getNotes() != null) {
-            notes.setText(presenter.getNotes());
-        }
-    }
-
-    //Method which set languages data from db into language fields
-    private void setLanguagesDataFromDB() {
-        languageEditTextAdapter.addAllLanguages(presenter.getLanguages());
-    }
-
-    //Method which set skills data from db into skills fields
-    private void setSkillsDataFromDB() {
-        skillAdapter.addAllSkill(presenter.getSkills());
-    }
-
-    //Method, which set data from telephone book into edit form
-    private void setContactDataFromPhoneBook(Contact contact) {
-        if (contact.getPhotoUri() != null) {
-            photoUri = contact.getPhotoUri();
-            presenter.setPhotoUri(photoUri);
-            Glide.with(mContext)
-                    .asBitmap()
-                    .load(photoUri)
-                    .into(photo);
-            showImagePen();
-
-        }
-
-        if (contact.getName() != null) {
-            presenter.setName(contact.getName());
-            name.setText(contact.getName());
-        }
-
-        if (contact.getPhone() != null) {
-            presenter.setPhone(contact.getPhone());
-            phone.setText(contact.getPhone());
-        }
-
-        if (contact.getEmail() != null) {
-            presenter.setEmail(contact.getEmail());
-            email.setText(contact.getName());
-        }
-
-        if (contact.getLinkedInLink() != null) {
-            presenter.setLinkedInLink(contact.getLinkedInLink());
-            linkedIn.setText(contact.getLinkedInLink());
-        }
-
-        if (contact.getDateOfLatestContact() != null) {
-            presenter.setDateOfLatestConnect(contact.getDateOfLatestContact());
-            date.setText(contact.getDateOfLatestContact());
-        }
-
-    }
-
+    /*-------------------------------------Text and Spinner Watcher-------------------------------*/
     //Initialization TextWatcher for edit text fields
     private void initEditTextWatcher() {
         name.addTextChangedListener(new TextWatcher() {
@@ -635,6 +447,10 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         });
     }
 
+    //Method, which show image for image container
+    private void showImagePen() {
+        image_pen.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void onClick(View view) {
@@ -677,7 +493,6 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         }
     }
 
-    //Method which create menu for toolbar
     @Override
     public void onCreateOptionMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.sign_up_by_email_toolbar_menu, menu);
@@ -688,58 +503,140 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
         if (item.getItemId() == R.id.sign_up_by_email_toolbar_send) {
             presenter.setLanguages(languageEditTextAdapter.getLanguages());
             presenter.setSkills(skillAdapter.getSkills());
-
-            if (fragmentName.equals("PhoneContactFragment")) {
-                presenter.insertIntoDb();
-                Toast.makeText(mContext, "Дані занесено успішно", Toast.LENGTH_SHORT).show();
-                fragment.setDataToMainActivity("ContactList");
-            } else if(fragmentName.equals("DetailContact")) {
-                presenter.updateDataInDB(id, recruiterNotesId);
-                Toast.makeText(mContext, "Дані оновлено", Toast.LENGTH_SHORT).show();
-                fragment.showDetailContactFragment(id, recruiterNotesId, fragmentName);
-            } else {
-                presenter.updateDataInDB(id, recruiterNotesId);
-                Toast.makeText(mContext, "Дані оновлено", Toast.LENGTH_SHORT).show();
-                fragment.setDataToMainActivity("ContactList");
-            }
+            presenter.onClickSentButton();
         }
     }
 
-    //Method which set photo from gallery
+
+    /*---------------------------------------------Show data--------------------------------------*/
     @Override
-    public void setPhoto(String photoUri) {
-        //Hide camera icon
-        loadPhoto.setVisibility(View.GONE);
+    public void showPhone(String phone) {
+        this.phone.setText(phone);
+    }
 
-        presenter.setPhotoUri(photoUri);
+    @Override
+    public void showEmail(String email) {
+        this.email.setText(email);
+    }
 
-        //Show photo in imageVew
+    @Override
+    public void showLinkedInLink(String linkedInLink) {
+        this.linkedIn.setText(linkedInLink);
+    }
+
+    @Override
+    public void showName(String name) {
+        this.name.setText(name);
+    }
+
+    @Override
+    public void showDateOfLatestContact(String dateOfLatestContact) {
+        date.setText(dateOfLatestContact);
+    }
+
+    @Override
+    public void showPhoto(String photoUri) {
         Glide.with(mContext)
                 .asBitmap()
                 .load(photoUri)
                 .into(photo);
+
+        loadPhoto.setVisibility(View.GONE);
         showImagePen();
     }
 
     @Override
-    public void setContact(Contact contact) {
-        if (contact != null) {
-            setContactDataFromPhoneBook(contact);
-        }
+    public void setStudentRadioButton() {
+        studentRBtn.setChecked(true);
     }
 
     @Override
-    public void setFragmentName(String fragmentName) {
-        this.fragmentName = fragmentName;
+    public void setWorkRadioButton() {
+        workRBtn.setChecked(true);
     }
 
     @Override
-    public void setId(long id) {
-        this.id = id;
+    public void showProfession(String profession) {
+        this.profession.setText(profession);
     }
 
     @Override
-    public void setRecruiterNotesId(long recruiterNotesId) {
-        this.recruiterNotesId = recruiterNotesId;
+    public void setTraineeRadioButton() {
+        traineeRBtn.setChecked(true);
     }
+
+    @Override
+    public void setJuniorRadioButton() {
+        juniorRBtn.setChecked(true);
+    }
+
+    @Override
+    public void setMiddleRadioButton() {
+        middleRBtn.setChecked(true);
+    }
+
+    @Override
+    public void setSeniorRadioButton() {
+        seniorRBtn.setChecked(true);
+    }
+
+    @Override
+    public void setTechLeadRadioButton() {
+        techLeadRBtn.setChecked(true);
+    }
+
+    @Override
+    public void showJobOrUniversity(String jobOrUniversity) {
+        this.jobOrUniversity.setText(jobOrUniversity);
+    }
+
+    @Override
+    public void setJobInterestSpinnerItem(int position) {
+        jobInterest.setSelection(position);
+    }
+
+    @Override
+    public void showAdvantages(String advantages) {
+        this.advantages.setText(advantages);
+    }
+
+    @Override
+    public void showDisadvantages(String disadvantages) {
+        this.disadvanteges.setText(disadvantages);
+    }
+
+    @Override
+    public void showNotes(String notes) {
+        this.notes.setText(notes);
+    }
+
+    @Override
+    public void showLanguages(List<Language> languages) {
+        languageEditTextAdapter.addAllLanguages(languages);
+    }
+
+    @Override
+    public void showSkills(List<Skill> skills) {
+        skillAdapter.addAllSkill(skills);
+    }
+
+    @Override
+    public void hideDeveloperFields() {
+        jobOrUniversity.setHint("Місце навчання");
+        profession.setVisibility(View.GONE);
+        experience_container.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showDeveloperFields() {
+        jobOrUniversity.setHint("Місце роботи");
+        profession.setVisibility(View.VISIBLE);
+        experience_container.setVisibility(View.VISIBLE);
+    }
+
 }

@@ -56,7 +56,7 @@ public class SkillForSearchAdapter extends RecyclerView.Adapter<SkillForSearchAd
             holder.name.setText(skillItem.getName());
         }
 
-        if (holder.skill != null && !skillItem.getSkill().isEmpty()) {
+        if (holder.skill != null && skillItem.getSkill() != null && !skillItem.getSkill().isEmpty()) {
             holder.skill.setText(skillItem.getSkill());
         }
 

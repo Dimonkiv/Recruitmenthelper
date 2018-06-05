@@ -65,7 +65,7 @@ public class EditContactFragment extends Fragment implements EditContactContract
 
     //Initialization presenter
     private void initPresenter() {
-        presenter = new EditContactPresenter();
+        presenter = new EditContactPresenter(this);
     }
 
     //Initialization View
@@ -80,40 +80,44 @@ public class EditContactFragment extends Fragment implements EditContactContract
         if (bundle != null && bundle.getString("fragmentName") != null) {
             String fragmentName = bundle.getString("fragmentName");
             if (fragmentName.equals("PhoneContactFragment")) {
-                view.setContact((Contact)bundle.getSerializable("contact"));
-                view.setFragmentName(fragmentName);
+                presenter.setContact((Contact)bundle.getSerializable("contact"));
+                presenter.setFragmentName(fragmentName);
+                presenter.showContact();
             } else if(fragmentName.equals("DetailContact") || fragmentName.equals("ContactListEditBtn")){
-                view.setId(bundle.getLong("id"));
-                view.setRecruiterNotesId(bundle.getLong("recruiterNotesId"));
-                view.setFragmentName(fragmentName);
-                view.setDataFromDBIntoFields();
+                presenter.setId(bundle.getLong("id"));
+                presenter.setRecruiterNotesId(bundle.getLong("recruiterNotesId"));
+                presenter.setFragmentName(fragmentName);
+                presenter.loadData();
             }
         }
     }
 
-    //Method which show DetailContactFragment
+    @Override
     public void showDetailContactFragment(long id, long recruiterNotesId, String fragmentName) {
         ((SecondaryActivity)getActivity()).showDetailContactFragment(id, recruiterNotesId, fragmentName);
     }
 
-    //Set icon-button allow
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         view.onCreateOptionMenu(menu, inflater);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    //Listener for allow button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         view.onOptionsItemSelected(item);
         return true;
     }
 
-
     @Override
-    public void startActivityForResult(Intent intent) {
-        startActivityForResult(intent, 1);
+    public void startActivityForResult() {
+        //Open system gallery
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        //Type of received object - image
+        photoPickerIntent.setType("image/*");
+        //Start activity for result
+
+        startActivityForResult(photoPickerIntent, 1);
     }
 
     @Override
@@ -121,14 +125,14 @@ public class EditContactFragment extends Fragment implements EditContactContract
         ((SecondaryActivity)getActivity()).goToMainActivity(fragmentName);
     }
 
-    //Method, which get photoUri from gallery
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         //If received cod is equal to PICK_IMAGE code
         if (requestCode == 1) {
-            view.setPhoto(data.getData().toString());
+            presenter.setPhotoUri(data.getData().toString());
+            view.showPhoto(data.getData().toString());
         }
     }
 }

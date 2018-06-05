@@ -17,7 +17,6 @@ import java.util.List;
 public class EditContactPresenter implements EditContactContract.Presenter {
 
     private EditContactContract.View view;
-    private AppDatabase db;
     private ContactDao contactDao;
     private RecruiterNotesDao recruiterNotesDao;
     private LanguageDao languageDao;
@@ -26,16 +25,20 @@ public class EditContactPresenter implements EditContactContract.Presenter {
     private RecruiterNotes recruiterNotes;
     private List<Language> languages, newLanguages;
     private List<Skill> skills, newSkills;
+    private long id, recruiterNotesId;
+    private String fragmentName;
+    private EditContactContract.Fragment fragment;
 
 
-    EditContactPresenter() {
+    EditContactPresenter(EditContactContract.Fragment fragment) {
+        this.fragment = fragment;
         initDao();
         initModel();
     }
 
     //Initialization dao
     private void initDao() {
-        db = InitDatabase.getInstance().getDatabese();
+        AppDatabase db = InitDatabase.getInstance().getDatabese();
         contactDao = db.contactDao();
         recruiterNotesDao = db.recruiterNotesDao();
         skillDao = db.skillDao();
@@ -50,6 +53,36 @@ public class EditContactPresenter implements EditContactContract.Presenter {
         skills = new ArrayList<>();
         newLanguages = new ArrayList<>();
         newSkills = new ArrayList<>();
+    }
+
+
+    /*---------------------------------Load data----------------------------------------------------------------*/
+    //Method, which load contact
+    private void loadContact() {
+        contact = contactDao.getById(id);
+    }
+
+    //Method, which load recruiterNotes
+    private void loadRecruiterNotes() {
+        recruiterNotes = recruiterNotesDao.getById(recruiterNotesId);
+    }
+
+    //Method, which load languages
+    private void loadLanguages() {
+        languages = languageDao.getAllByRecruiterNotesId(recruiterNotesId);
+    }
+
+    //Method, which load skills
+    private void loadSkills() {
+        skills = skillDao.getAllByRecruiterNotesId(recruiterNotesId);
+    }
+
+
+    /*-------------------------------------Insert into db----------------------------------------------------------*/
+    //Method, which insert data into db
+    private void insertIntoDb() {
+        checkedEnteredData();
+        insertCheckedDataIntoDB();
     }
 
     //Method which check entered data
@@ -114,17 +147,17 @@ public class EditContactPresenter implements EditContactContract.Presenter {
 
     //Method which insert data into db
     private void insertCheckedDataIntoDB() {
-        long recuiterId = recruiterNotesDao.insert(recruiterNotes);
-        contact.setRecruiterNotesId(recuiterId);
+        long recruiterNotesId = recruiterNotesDao.insert(recruiterNotes);
+        contact.setRecruiterNotesId(recruiterNotesId);
         contactDao.insert(contact);
-        insertLanguages(recuiterId);
-        insertSkills(recuiterId);
+        insertLanguages(recruiterNotesId);
+        insertSkills(recruiterNotesId);
     }
 
     //Method which insert skills
     private void insertLanguages(long recruiterId) {
         for (Language language : newLanguages) {
-            if(language.getLanguageLevel() == null) {
+            if (language.getLanguageLevel() == null) {
                 language.setLanguageLevel("A1");
             }
             language.setRecruiterNotesId(recruiterId);
@@ -138,6 +171,243 @@ public class EditContactPresenter implements EditContactContract.Presenter {
             skill.setRecruiterNotesId(recruiterId);
             skillDao.insert(skill);
         }
+    }
+
+
+    /*-------------------------------------Update data----------------------------------------------------------------*/
+    //Method, which update data
+    private void updateDataInDB() {
+        updateContact();
+        updateRecruiterNotes();
+        updateLanguages();
+        updateSkills();
+    }
+
+    //Method which update Contact
+    private void updateContact() {
+        if (contact != null) {
+            contactDao.update(contact);
+        }
+    }
+
+    //Method which update RecruiterNotes
+    private void updateRecruiterNotes() {
+        if (recruiterNotes != null) {
+            recruiterNotesDao.update(recruiterNotes);
+        }
+    }
+
+    //Method which update Languages
+    private void updateLanguages() {
+        int i = 0;
+        for (Language language : newLanguages) {
+            language.setRecruiterNotesId(recruiterNotesId);
+
+            if (i < languages.size()) {
+                languageDao.update(language);
+            } else {
+                languageDao.insert(language);
+            }
+
+            i++;
+        }
+
+        if (newLanguages.size() < languages.size()) {
+            removeRemovedLanguagesFromDB();
+        }
+    }
+
+    //method which delete languages which was deleted in adapter during updating date
+    private void removeRemovedLanguagesFromDB() {
+        int i = 0;
+
+        for (Language language : languages) {
+            if (i < newLanguages.size()) {
+                if (!language.equals(newLanguages.get(i))) {
+                    languageDao.delete(language);
+                    i--;
+                }
+
+                i++;
+            } else {
+                languageDao.delete(language);
+            }
+        }
+    }
+
+    //Method which update Skills
+    private void updateSkills() {
+        int i = 0;
+
+        for (Skill skill : newSkills) {
+            skill.setRecruiterNotesId(recruiterNotesId);
+
+            if (i < skills.size()) {
+                skillDao.update(skill);
+            } else {
+                skillDao.insert(skill);
+            }
+
+            i++;
+        }
+
+        if (newSkills.size() < skills.size()) {
+            removeRemovedSkillsFromDB();
+        }
+    }
+
+    //method which delete languages which was deleted in adapter during updating date
+    private void removeRemovedSkillsFromDB() {
+        int i = 0;
+
+        for (Skill skill : skills) {
+            if (i < newSkills.size()) {
+                if (!skill.equals(newSkills.get(i))) {
+                    skillDao.delete(skill);
+                    i--;
+                }
+                i++;
+            } else {
+                skillDao.delete(skill);
+            }
+        }
+    }
+
+
+    /*-----------------------------------------------Show data in View----------------------------------------------*/
+    //Method which show data in view
+    private void showData() {
+        showContact();
+        showRecruiterNotes();
+        view.showLanguages(languages);
+        view.showSkills(skills);
+    }
+
+    //Method which show recruiter notes data in view
+    private void showRecruiterNotes() {
+        boolean isWorker = false;
+
+        if (recruiterNotes != null) {
+            if (recruiterNotes.getTypeOfEmployment() != null) {
+                if (recruiterNotes.getTypeOfEmployment().equals("Працює")) {
+                    view.setWorkRadioButton();
+                    view.showDeveloperFields();
+                    isWorker = true;
+                } else {
+                    view.setStudentRadioButton();
+                    view.hideDeveloperFields();
+                }
+            }
+
+            if (isWorker) {
+                if (recruiterNotes.getProfession() != null) {
+                    view.showProfession(recruiterNotes.getProfession());
+                }
+
+                if (recruiterNotes.getExperience() != null) {
+                    switch (recruiterNotes.getExperience()) {
+                        case "trainee":
+                            view.setTraineeRadioButton();
+                            break;
+                        case "junior":
+                            view.setJuniorRadioButton();
+                            break;
+                        case "middle":
+                            view.setMiddleRadioButton();
+                            break;
+                        case "senior":
+                            view.setSeniorRadioButton();
+                            break;
+                        case "techLead":
+                            view.setTechLeadRadioButton();
+                            break;
+                    }
+                }
+            }
+
+            if (recruiterNotes.getJobOrUniversity() != null) {
+                view.showJobOrUniversity(recruiterNotes.getJobOrUniversity());
+            }
+
+            if (recruiterNotes.getJobInterests() != null) {
+                view.setJobInterestSpinnerItem(getJobInterestItemId());
+            }
+
+            if (recruiterNotes.getAdvantages() != null) {
+                view.showAdvantages(recruiterNotes.getAdvantages());
+            }
+
+            if (recruiterNotes.getDisadvantages() != null) {
+                view.showDisadvantages(recruiterNotes.getDisadvantages());
+            }
+
+            if (recruiterNotes.getNotes() != null) {
+                view.showNotes(recruiterNotes.getNotes());
+            }
+        }
+    }
+
+    //Method which return jobInterest spinner item id
+    private int getJobInterestItemId() {
+        int jobInterestId = 0;
+
+        switch (recruiterNotes.getJobInterests()) {
+            case "Не працює":
+                jobInterestId = 0;
+                break;
+            case "Працює":
+                jobInterestId = 1;
+                break;
+            case "Шукає роботу":
+                jobInterestId = 2;
+                break;
+            case "Зацікавлений в нових можливостях":
+                jobInterestId = 3;
+                break;
+
+        }
+
+        return jobInterestId;
+    }
+
+    @Override
+    public void showContact() {
+        if (contact != null) {
+            if (contact.getName() != null) {
+                view.showName(contact.getName());
+            }
+
+            if (contact.getPhone() != null) {
+                view.showPhone(contact.getPhone());
+            }
+
+            if (contact.getEmail() != null) {
+                view.showEmail(contact.getEmail());
+            }
+
+            if (contact.getLinkedInLink() != null) {
+                view.showLinkedInLink(contact.getLinkedInLink());
+            }
+
+            if (contact.getDateOfLatestContact() != null) {
+                view.showDateOfLatestContact(contact.getDateOfLatestContact());
+            }
+
+            if (contact.getPhotoUri() != null) {
+                view.showPhoto(contact.getPhotoUri());
+            }
+        }
+    }
+
+    /*---------------------------------------------Set data-----------------------------------------------------*/
+    @Override
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    @Override
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override
@@ -168,6 +438,11 @@ public class EditContactPresenter implements EditContactContract.Presenter {
     @Override
     public void setPhotoUri(String photoUri) {
         contact.setPhotoUri(photoUri);
+    }
+
+    @Override
+    public void setRecruiterNotesId(long recruiterNotesId) {
+        this.recruiterNotesId = recruiterNotesId;
     }
 
     @Override
@@ -232,286 +507,62 @@ public class EditContactPresenter implements EditContactContract.Presenter {
         newSkills.add(skill);
     }
 
+
+    /*------------------------------------------------Get data-----------------------------------*/
     @Override
-    public void insertIntoDb() {
-        checkedEnteredData();
-        insertCheckedDataIntoDB();
+    public long getId() {
+        return id;
     }
 
     @Override
-    public void updateDataInDB(long id, long recruiterNotesId) {
-        updateContact(id);
-        updateRecruiterNotes(recruiterNotesId);
-        updateLanguages(recruiterNotesId);
-        updateSkills(recruiterNotesId);
+    public void setFragmentName(String fragmentName) {
+        this.fragmentName = fragmentName;
     }
 
-    //Method which update Contact
-    private void updateContact(long id) {
-        if (contact != null) {
-            contactDao.update(contact);
-        }
+    @Override
+    public long getRecruiterNotesId() {
+        return recruiterNotesId;
     }
 
-    //Method which update RecruiterNotes
-    private void updateRecruiterNotes(long recruiterNotesId) {
-        if (recruiterNotes != null) {
-            recruiterNotesDao.update(recruiterNotes);
+    @Override
+    public void onClickSentButton() {
+        if (fragmentName.equals("PhoneContactFragment")) {
+            insertIntoDb();
+            view.showToast("Дані записані!");
+            fragment.setDataToMainActivity("ContactList");
+        } else if (fragmentName.equals("DetailContact")) {
+            updateDataInDB();
+            view.showToast("Дані оновлено!");
+            fragment.showDetailContactFragment(id, recruiterNotesId, fragmentName);
+        } else {
+            updateDataInDB();
+            view.showToast("Дані оновлено!");
+            fragment.setDataToMainActivity("ContactList");
         }
+
     }
 
-    //Method which update Languages
-    private void updateLanguages(long recruiterNotesId) {
-        int i = 0;
-        for (Language language : newLanguages) {
-            language.setRecruiterNotesId(recruiterNotesId);
-
-            if (i < languages.size()) {
-                languageDao.update(language);
-            } else {
-                languageDao.insert(language);
-            }
-
-            i++;
-        }
-
-        if (newLanguages.size() < languages.size()) {
-            removeRemovedLanguagesFromDB();
-        }
-    }
-
-    //method which delete languages which was deleted in adapter during updating date
-    private void removeRemovedLanguagesFromDB() {
-        int i = 0;
-
-        for (Language language : languages) {
-            if(i < newLanguages.size()) {
-                if (!language.equals(newLanguages.get(i))) {
-                    languageDao.delete(language);
-                    i--;
-                }
-
-                i++;
-            } else {
-                languageDao.delete(language);
-            }
-        }
-    }
-
-    //Method which update Skills
-    private void updateSkills(long recruiterNotesId) {
-        int i = 0;
-        for (Skill skill : newSkills) {
-            skill.setRecruiterNotesId(recruiterNotesId);
-
-            if (i < skills.size()) {
-                skillDao.update(skill);
-            } else {
-                skillDao.insert(skill);
-            }
-
-            i++;
-        }
-
-        if (newSkills.size() < skills.size()) {
-            removeRemovedSkillsFromDB();
-        }
-    }
-
-    //method which delete languages which was deleted in adapter during updating date
-    private void removeRemovedSkillsFromDB() {
-        int i = 0;
-
-        for (Skill skill : skills) {
-            if (i < newSkills.size()) {
-                if (!skill.equals(newSkills.get(i))) {
-                    skillDao.delete(skill);
-                    i--;
-                }
-                i++;
-            } else {
-                skillDao.delete(skill);
-            }
+    @Override
+    public void onBackButtonClick() {
+        if (fragmentName.equals("PhoneContactFragment") || fragmentName.equals("ContactListEditBtn")) {
+            fragment.setDataToMainActivity(fragmentName);
+        } else {
+            fragment.showDetailContactFragment(id, recruiterNotesId, fragmentName);
         }
     }
 
     @Override
-    public int getJobInterestItemId(String jobInterest) {
-        int jobInterestId = 0;
-
-        switch(jobInterest) {
-            case "Не працює":
-                jobInterestId = 0;
-                break;
-            case "Працює":
-                jobInterestId = 1;
-                break;
-            case "Шукає роботу":
-                jobInterestId = 2;
-                break;
-            case "Зацікавлений в нових можливостях":
-                jobInterestId = 3;
-                break;
-
-        }
-
-        return jobInterestId;
+    public void setView(EditContactContract.View view) {
+        this.view = view;
     }
 
     @Override
-    public String getName() {
-        if (contact != null) {
-            return contact.getName();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getPhone() {
-        if (contact != null) {
-            return contact.getPhone();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getEmail() {
-        if (contact != null) {
-            return contact.getEmail();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getLinkedInLink() {
-        if (contact != null) {
-            return contact.getLinkedInLink();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getDateOfLatestConnect() {
-        if (contact != null) {
-            return contact.getDateOfLatestContact();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getPhotoUri() {
-        if (contact != null) {
-            return contact.getPhotoUri();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getTypeOfEmployment() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getTypeOfEmployment();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getProfession() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getProfession();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getExperience() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getExperience();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getJobOrUniversity() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getJobOrUniversity();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getJobInterest() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getJobInterests();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getAdvantages() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getAdvantages();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getDisadvantages() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getDisadvantages();
-        }
-
-        return "";
-    }
-
-    @Override
-    public String getNotes() {
-        if (recruiterNotes != null) {
-            return recruiterNotes.getNotes();
-        }
-
-        return "";
-    }
-
-    @Override
-    public List<Language> getLanguages() {
-        return languages;
-    }
-
-    @Override
-    public List<Skill> getSkills() {
-        return skills;
-    }
-
-    @Override
-    public void loadContact(long id) {
-        contact = contactDao.getById(id);
-    }
-
-    @Override
-    public void loadRecruiterNotes(long recruiterNotesId) {
-        recruiterNotes = recruiterNotesDao.getById(recruiterNotesId);
-    }
-
-    @Override
-    public void loadLanguages(long recruiterNotesId) {
-        languages = languageDao.getAllByRecruiterNotesId(recruiterNotesId);
-    }
-
-    @Override
-    public void loadSkills(long recruiterNotesId) {
-        skills = skillDao.getAllByRecruiterNotesId(recruiterNotesId);
+    public void loadData() {
+        loadContact();
+        loadRecruiterNotes();
+        loadLanguages();
+        loadSkills();
+        showData();
     }
 
 

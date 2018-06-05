@@ -130,8 +130,10 @@ public class ExpandedSearchFragment extends Fragment  implements ExpandedSearchC
         List<LanguageForExpandedSearch> filteredLanguage = new ArrayList<>();
 
         for (LanguageForExpandedSearch languageItem : languages) {
-            if (languageItem.getLanguage().toLowerCase().contains(text.toLowerCase())) {
-                filteredLanguage.add(languageItem);
+            if (languageItem.getLanguage() != null) {
+                if (languageItem.getLanguage().toLowerCase().contains(text.toLowerCase())) {
+                    filteredLanguage.add(languageItem);
+                }
             }
         }
 
@@ -143,8 +145,10 @@ public class ExpandedSearchFragment extends Fragment  implements ExpandedSearchC
         List<SkillForExpandedSearch> filteredSkill = new ArrayList<>();
 
         for (SkillForExpandedSearch skillItem : skills) {
-            if (skillItem.getSkill().toLowerCase().contains(text.toLowerCase())) {
-                filteredSkill.add(skillItem);
+            if (skillItem.getSkill() != null) {
+                if (skillItem.getSkill().toLowerCase().contains(text.toLowerCase())) {
+                    filteredSkill.add(skillItem);
+                }
             }
         }
 
