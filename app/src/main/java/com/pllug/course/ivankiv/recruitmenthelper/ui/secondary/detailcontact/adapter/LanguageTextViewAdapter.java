@@ -10,14 +10,12 @@ import android.widget.TextView;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LanguageTextViewAdapter extends RecyclerView.Adapter<LanguageTextViewAdapter.ViewHolder> {
-    private List<Language> languages;
+    private List<Language> languages = new ArrayList<>();
 
-    public LanguageTextViewAdapter(List<Language> languages) {
-        this.languages = languages;
-    }
 
     @NonNull
     @Override
@@ -45,6 +43,10 @@ public class LanguageTextViewAdapter extends RecyclerView.Adapter<LanguageTextVi
     @Override
     public int getItemCount() {
         return languages.size();
+    }
+
+    public void addAllLanguages(List<Language> languages) {
+        this.languages = languages;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

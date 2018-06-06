@@ -1,27 +1,108 @@
 package com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.detailcontact;
 
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Language;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.RecruiterNotes;
-import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
+
 
 import java.util.List;
 
-public interface DetailContactContract {
+interface DetailContactContract {
 
     interface View {
+
+        /*---------------------------------Show data----------------------------------------------*/
+        void showToolbarTitle(String title);
+
+        void showPhoto(String imageURI);
+
+        void showName(String name);
+
+        void showTypeOfEmployment(String typeOfEmployment);
+
+        void showProfession(String profession);
+
+        void showExperience(String experience);
+
+        void showJobOrUniversity(String jobOrUniversity);
+
+        void showJobInterest(String jobInterest);
+
+        void setSelectedButton(int imgId);
+
+        void showSkills(String skills);
+
+        void showLanguages(List<Language> languages);
+
+        void showDateOfLastConnect(String dateOfLastConnect);
+
+        void showAdvantages(String advantages);
+
+        void showDisadvantages(String disadvantages);
+
+        void showNotes(String notes);
+
+        void showTypeOfEmploymentContainer();
+
+        void showToast(String message);
+
+        /*---------------------------------Hide containers----------------------------------------*/
+        void hideTypeOfEmploymentContainer();
+
+        void hideProfessionContainer();
+
+        void hideJobOrUniversityContainer();
+
+        void hideSkillsContainer();
+
+        void hideLanguagesContainer();
+
+        void hideRecruiterNotesContainer();
+
+        void hideDateOfLastConnectContainer();
+
+        void hideAdvantagesContainer();
+
+        void hideDisadvantagesContainer();
+
+        void hideNotesContainer();
+
+    }
+
+    interface Fragment {
+
+        void showSendEmailFragment(String email, long id, long recruiterNotesId, String fragmentName);
+
+        void setPermission(String phone);
+
+        void showEditContactFragment(long id, long recruiterNotesId);
+
+        void goToMainActivity(String fragmentName);
 
     }
 
     interface Presenter {
-        Contact getContact();
 
-        RecruiterNotes getRecruiterNotes();
+        /*---------------------------------Set data-----------------------------------------------*/
+        void setView(DetailContactContract.View view);
 
-        List<Language> getLanguages();
+        void setId(long id);
 
-        List<Skill> getSkills();
+        void setRecruiterNotesId(long recruiterNotesId);
 
-        void updateSelected(boolean state, long id);
+        void setFragmentName(String fragmentName);
+
+        String getPhone();
+
+        void loadData();
+
+        /*---------------------------------Click handlers-----------------------------------------*/
+        void onEmailButtonClick();
+
+        void onPhoneButtonClick();
+
+        void onSelectedButtonClick();
+
+        void onEditButtonClick();
+
+        void onBackButtonClick();
     }
 }
