@@ -2,7 +2,6 @@ package com.pllug.course.ivankiv.recruitmenthelper.ui.main.phonecontact.adapter;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,14 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.phonecontact.PhoneContactPresenter;
-import com.pllug.course.ivankiv.recruitmenthelper.ui.secondary.SecondaryActivity;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -28,9 +24,9 @@ public class PhoneContactAdapter extends RecyclerView.Adapter<PhoneContactAdapte
     private Context mContext;
     private PhoneContactPresenter presenter;
 
-    public PhoneContactAdapter(Context mContext, List<Contact> contacts, PhoneContactPresenter presenter) {
+    public PhoneContactAdapter(Context mContext, PhoneContactPresenter presenter) {
         this.mContext = mContext;
-        this.contacts = contacts;
+        this.contacts = new ArrayList<>();
         this.presenter = presenter;
     }
 
@@ -67,7 +63,7 @@ public class PhoneContactAdapter extends RecyclerView.Adapter<PhoneContactAdapte
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.setContact(contacts.get(position));
+                    presenter.onPhoneContactItemClick(contacts.get(position));
                 }
             });
         }
@@ -77,6 +73,12 @@ public class PhoneContactAdapter extends RecyclerView.Adapter<PhoneContactAdapte
     @Override
     public int getItemCount() {
         return contacts.size();
+    }
+
+    public void addAllContacts(List<Contact> contacts) {
+        this.contacts.clear();
+        this.contacts.addAll(contacts);
+        notifyDataSetChanged();
     }
 
     public void filterList(List<Contact> filteredContact) {

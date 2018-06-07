@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,15 +24,13 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.MainActivity;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.phonecontact.adapter.PhoneContactAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PhoneContactFragment extends Fragment implements PhoneContactContract.View {
     private View root;
     private PhoneContactPresenter presenter;
-    private List<Contact> contacts;
     private PhoneContactAdapter adapter;
-    private ConatctAsynkTask mTask;
+    private ContactAsyncTask mTask;
 
     //View
     private RecyclerView listForContact;
@@ -49,16 +46,17 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
         root = inflater.inflate(R.layout.fragment_phone_contact, container, false);
 
         initView();
-        initEditSearchListener();
         initPresenter();
+        initEditSearchListener();
         initAdapter();
-        initAsynkTask();
+        initAsyncTask();
         setPermission();
 
         return root;
     }
 
 
+    /*---------------------------------Initialization---------------------------------------------*/
     //Initialization View
     private void initView() {
         listForContact = root.findViewById(R.id.add_contact_recycler_view);
@@ -73,14 +71,33 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
 
     //Initialization Adapter
     private void initAdapter() {
-        contacts = new ArrayList<>();
-        adapter = new PhoneContactAdapter(getActivity(), contacts, presenter);
+        adapter = new PhoneContactAdapter(getActivity(), presenter);
         listForContact.setAdapter(adapter);
         listForContact.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void initAsynkTask() {
-        mTask = new ConatctAsynkTask();
+    private void initAsyncTask() {
+        mTask = new ContactAsyncTask();
+    }
+
+    //Initialization TextChangeListener for search edit text
+    private void initEditSearchListener() {
+        searchEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                presenter.filterContacts(editable.toString());
+            }
+        });
     }
 
     //Method for set permission READ_CONTACT
@@ -102,43 +119,15 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
         }
     }
 
-    //Initialization TextChangeListener for search edit text
-    private void initEditSearchListener() {
-        searchEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
-            }
-        });
-    }
-
-    //Method, which checking coincidence between entered text and name in contact list
-    private void filter(String text) {
-        List<Contact> filteredContacts = new ArrayList<>();
-
-        for (Contact contactItem : contacts) {
-            if (contactItem.getName().toLowerCase().contains(text.toLowerCase())) {
-                filteredContacts.add(contactItem);
-            }
-        }
-
-        adapter.filterList(filteredContacts);
-    }
-
     //Method, which send data to MainActivity
     @Override
-    public void sendDataToMainActivity(Contact contact) {
+    public void showEditContactFragment(Contact contact) {
         ((MainActivity)getActivity()).goToSecondaryActivity(contact, "PhoneContactFragment");
+    }
+
+    @Override
+    public void showFilteredContacts(List<Contact> filteredContacts) {
+        adapter.filterList(filteredContacts);
     }
 
     @Override
@@ -158,8 +147,8 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
         }
     }
 
-
-    public class ConatctAsynkTask extends AsyncTask<Void, Void, List<Contact>> {
+    /*-----------------------------------Async task-----------------------------------------------*/
+    public class ContactAsyncTask extends AsyncTask<Void, Void, List<Contact>> {
 
         @Override
         protected void onPreExecute() {
@@ -174,9 +163,8 @@ public class PhoneContactFragment extends Fragment implements PhoneContactContra
 
         @Override
         protected void onPostExecute(List<Contact> contactList) {
-            super.onPostExecute(contacts);
-            contacts.addAll(contactList);
-            adapter.notifyDataSetChanged();
+            super.onPostExecute(contactList);
+            adapter.addAllContacts(contactList);
             progress.setVisibility(View.GONE);
         }
     }
