@@ -7,36 +7,84 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.db.dao.SkillDao;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.LanguageForExpandedSearch;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.SkillForExpandedSearch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExpandedSearchPresenter implements ExpandedSearchContract.Presenter {
-    private ExpandedSearchContract.View view;
-    private AppDatabase db;
+    private ExpandedSearchContract.Fragment fragment;
+    private ExpandedSearchView view;
     private LanguageDao languageDao;
     private SkillDao skillDao;
+    private List<LanguageForExpandedSearch> languages;
+    private List<SkillForExpandedSearch> skills;
 
-    ExpandedSearchPresenter(ExpandedSearchContract.View view) {
-        this.view = view;
+    ExpandedSearchPresenter(ExpandedSearchContract.Fragment fragment) {
+        this.fragment = fragment;
         initDatabase();
     }
 
     private void initDatabase() {
-        db = InitDatabase.getInstance().getDatabese();
+        AppDatabase db = InitDatabase.getInstance().getDatabese();
         skillDao = db.skillDao();
         languageDao = db.languageDao();
     }
 
-    public void setDataFromAdapter(long id, long recruiterNotesId, String typeView) {
-        view.sendDataToSecondaryActivity(id, recruiterNotesId, typeView);
+
+    @Override
+    public void onLanguageRadioButtonClick() {
+        view.setLanguageAdapter();
     }
 
     @Override
-    public List<SkillForExpandedSearch> getSkills() {
-        return skillDao.getAllSkillForSearch();
+    public void onSkillRadioButtonClick() {
+        view.setSkillAdapter();
     }
 
     @Override
-    public List<LanguageForExpandedSearch> getLanguages() {
-        return languageDao.getAllLanguageForSearch();
+    public void onAdapterItemClick(long id, long recruiterNotesId, String fragmentName) {
+        fragment.openDetailFragment(id, recruiterNotesId, fragmentName);
+    }
+
+    @Override
+    public void loadData() {
+        languages = languageDao.getAllLanguageForSearch();
+        view.addAllLanguages(languages);
+        skills = skillDao.getAllSkillForSearch();
+        view.addAllSkills(skills);
+    }
+
+    @Override
+    public void setView(ExpandedSearchView view) {
+        this.view = view;
+    }
+
+    @Override
+    public void filterLanguages(String text) {
+        List<LanguageForExpandedSearch> filteredLanguages = new ArrayList<>();
+
+        for (LanguageForExpandedSearch languageItem : languages) {
+            if (languageItem.getLanguage() != null) {
+                if (languageItem.getLanguage().toLowerCase().contains(text.toLowerCase())) {
+                    filteredLanguages.add(languageItem);
+                }
+            }
+        }
+
+        view.showFilteredLanguages(filteredLanguages);
+    }
+
+    @Override
+    public void filterSkills(String text) {
+        List<SkillForExpandedSearch> filteredSkill = new ArrayList<>();
+
+        for (SkillForExpandedSearch skillItem : skills) {
+            if (skillItem.getSkill() != null) {
+                if (skillItem.getSkill().toLowerCase().contains(text.toLowerCase())) {
+                    filteredSkill.add(skillItem);
+                }
+            }
+        }
+
+        view.showFilteredSkills(filteredSkill);
     }
 }

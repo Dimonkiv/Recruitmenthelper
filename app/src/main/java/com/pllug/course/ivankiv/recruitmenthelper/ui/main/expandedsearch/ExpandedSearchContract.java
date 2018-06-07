@@ -8,13 +8,40 @@ import java.util.List;
 public interface ExpandedSearchContract {
 
     interface View {
-        void sendDataToSecondaryActivity(long id, long recruiterNotesId, String typeView);
+        void setLanguageAdapter();
+
+        void addAllLanguages(List<LanguageForExpandedSearch> languages);
+
+        void showFilteredLanguages(List<LanguageForExpandedSearch> filteredLanguages);
+
+        void setSkillAdapter();
+
+        void addAllSkills(List<SkillForExpandedSearch> skills);
+
+        void showFilteredSkills(List<SkillForExpandedSearch> filteredSkills);
+
+
+    }
+
+    interface Fragment {
+        void openDetailFragment(long id, long recruiterNotesId, String fragmentName);
     }
 
     interface Presenter {
 
-        List<SkillForExpandedSearch> getSkills();
+        void onLanguageRadioButtonClick();
 
-        List<LanguageForExpandedSearch> getLanguages();
+        void onSkillRadioButtonClick();
+
+        void onAdapterItemClick(long id, long recruiterNotesId, String fragmentName);
+
+        void loadData();
+
+        void setView(ExpandedSearchView view);
+
+        void filterLanguages(String text);
+
+        void filterSkills(String text);
+
     }
 }

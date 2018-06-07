@@ -12,9 +12,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.LanguageForExpandedSearch;
+import com.pllug.course.ivankiv.recruitmenthelper.data.model.Skill;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.SkillForExpandedSearch;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.expandedsearch.ExpandedSearchContract;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.expandedsearch.ExpandedSearchPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,9 +28,9 @@ public class SkillForSearchAdapter extends RecyclerView.Adapter<SkillForSearchAd
     private List<SkillForExpandedSearch> skills;
     private ExpandedSearchPresenter presenter;
 
-    public SkillForSearchAdapter(Context mContext, List<SkillForExpandedSearch> skills,  ExpandedSearchPresenter presenter) {
+    public SkillForSearchAdapter(Context mContext, ExpandedSearchPresenter presenter) {
         this.mContext = mContext;
-        this.skills = skills;
+        this.skills = new ArrayList<>();
         this.presenter = presenter;
     }
 
@@ -64,7 +67,7 @@ public class SkillForSearchAdapter extends RecyclerView.Adapter<SkillForSearchAd
             holder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.setDataFromAdapter(skillItem.getId(), skillItem.getRecruiterNotesId(), "ExpandedSearch");
+                    presenter.onAdapterItemClick(skillItem.getId(), skillItem.getRecruiterNotesId(), "ExpandedSearch");
                 }
             });
         }
@@ -73,6 +76,11 @@ public class SkillForSearchAdapter extends RecyclerView.Adapter<SkillForSearchAd
     @Override
     public int getItemCount() {
         return skills.size();
+    }
+
+    public void addAllSkills(List<SkillForExpandedSearch> skills) {
+        this.skills.clear();
+        this.skills.addAll(skills);
     }
 
     public void filterList(List<SkillForExpandedSearch> filteredSkills) {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.LanguageForExpandedSearch;
+import com.pllug.course.ivankiv.recruitmenthelper.ui.main.expandedsearch.ExpandedSearchContract;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.expandedsearch.ExpandedSearchPresenter;
 
 import java.util.ArrayList;
@@ -23,9 +24,9 @@ public class LanguageForSearchAdapter extends RecyclerView.Adapter<LanguageForSe
 
     private Context mContext;
     private List<LanguageForExpandedSearch> languages;
-    private ExpandedSearchPresenter presenter;
+    private ExpandedSearchContract.Presenter presenter;
 
-    public LanguageForSearchAdapter(Context mContext, ExpandedSearchPresenter presenter) {
+    public LanguageForSearchAdapter(Context mContext, ExpandedSearchContract.Presenter presenter) {
         this.mContext = mContext;
         this.presenter = presenter;
         this.languages = new ArrayList<>();
@@ -56,7 +57,7 @@ public class LanguageForSearchAdapter extends RecyclerView.Adapter<LanguageForSe
             holder.name.setText(languageItem.getName());
         }
 
-        if (holder.language != null && !languageItem.getLanguage().isEmpty()) {
+        if (holder.language != null && languageItem.getLanguage() != null && !languageItem.getLanguage().isEmpty()) {
             holder.language.setText(languageItem.getLanguage());
         }
 
@@ -64,7 +65,7 @@ public class LanguageForSearchAdapter extends RecyclerView.Adapter<LanguageForSe
             holder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.setDataFromAdapter(languageItem.getId(), languageItem.getRecruiterNotesId(), "ExpandedSearch");
+                    presenter.onAdapterItemClick(languageItem.getId(), languageItem.getRecruiterNotesId(), "ExpandedSearch");
                 }
             });
         }
@@ -76,12 +77,17 @@ public class LanguageForSearchAdapter extends RecyclerView.Adapter<LanguageForSe
         return languages.size();
     }
 
+    public void addAllLanguages(List<LanguageForExpandedSearch> languages) {
+        this.languages.clear();
+        this.languages.addAll(languages);
+    }
+
     public void filterList(List<LanguageForExpandedSearch> filteredLanguages) {
         this.languages = filteredLanguages;
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView image;
         TextView name, language;
         RelativeLayout container;
