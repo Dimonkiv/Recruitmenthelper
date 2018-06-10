@@ -16,6 +16,7 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.model.ContactListItem;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.contactlist.ContactListPresenter;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,9 +26,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private List<ContactListItem>  contactList;
     private ContactListPresenter presenter;
 
-    public ContactListAdapter(Context mContext, List<ContactListItem>  contactList, ContactListPresenter presenter) {
+    public ContactListAdapter(Context mContext, ContactListPresenter presenter) {
         this.mContext = mContext;
-        this.contactList = contactList;
+        this.contactList = new ArrayList<>();
         this.presenter = presenter;
     }
 
@@ -35,8 +36,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contact_list, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+
+        return new ViewHolder(view);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             holder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.setDataFromAdapter(contactItem.getId(), contactItem.getRecruiterNotesId(), "ContactList");
+                    presenter.onContactsItemClick(contactItem.getId(), contactItem.getRecruiterNotesId());
                 }
             });
         }
@@ -83,7 +84,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             holder.editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.setDataFromAdapter(contactItem.getId(), contactItem.getRecruiterNotesId(), "ContactListEditBtn");
+                    presenter.onEditButtonClick(contactItem.getId(), contactItem.getRecruiterNotesId());
                 }
             });
         }
@@ -92,7 +93,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.deleteContact(contactItem.getId(), contactItem.getRecruiterNotesId());
+                    presenter.onDeleteButtonClick(contactItem.getId(), contactItem.getRecruiterNotesId());
                     contactList.remove(holder.getAdapterPosition());
                     notifyItemRemoved(holder.getAdapterPosition());
                 }
@@ -107,6 +108,12 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return contactList.size();
     }
 
+    public void addAllContacts(List<ContactListItem> contacts) {
+        contactList.clear();
+        contactList.addAll(contacts);
+        notifyDataSetChanged();
+    }
+
     public void filterList(List<ContactListItem> filteredContact) {
         this.contactList = filteredContact;
         notifyDataSetChanged();
@@ -119,7 +126,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         RelativeLayout container;
 
 
-        public ViewHolder(View item) {
+        ViewHolder(View item) {
             super(item);
             photo = item.findViewById(R.id.item_contact_list_photo);
             name = item.findViewById(R.id.item_contact_list_name);

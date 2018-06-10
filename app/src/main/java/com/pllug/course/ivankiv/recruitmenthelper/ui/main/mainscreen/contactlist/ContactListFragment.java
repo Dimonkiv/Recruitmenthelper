@@ -11,7 +11,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,14 +20,11 @@ import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.ContactListItem;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.MainActivity;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.contactlist.adapter.ContactListAdapter;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactListFragment extends Fragment implements ContactListContract.View {
     private View root;
     private ContactListPresenter presenter;
-    private List<ContactListItem> contacts;
     private ContactListAdapter adapter;
 
     //View
@@ -46,12 +42,17 @@ public class ContactListFragment extends Fragment implements ContactListContract
         initEditSearchListener();
         initPresenter();
         initAdapter();
-        showContactList();
 
         return root;
     }
 
-    //Initialization view
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.loadContacts();
+    }
+
+    /*---------------------------------------Initialization---------------------------------------*/
     private void initView() {
         recyclerView = root.findViewById(R.id.contact_list_container);
         searchEdit = root.findViewById(R.id.contact_list_search_edit);
@@ -59,38 +60,16 @@ public class ContactListFragment extends Fragment implements ContactListContract
         no_result_container = root.findViewById(R.id.contact_list_no_result_container);
     }
 
-    //Initialization adapter
     private void initAdapter() {
-        contacts = new ArrayList<>();
-
-        adapter = new ContactListAdapter(getActivity(), contacts, presenter);
-
+        adapter = new ContactListAdapter(getActivity(), presenter);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    //Initialization presenter
     private void initPresenter() {
         presenter = new ContactListPresenter(this);
     }
 
-    //Method, which show contact list
-    private void showContactList() {
-        contacts.addAll(presenter.getData());
-
-        if (contacts.isEmpty()) {
-            no_result_container.setVisibility(View.VISIBLE);
-            search_container.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            no_result_container.setVisibility(View.GONE);
-            search_container.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    //Initialization TextChangeListener for search edit text
     private void initEditSearchListener() {
         searchEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -105,27 +84,66 @@ public class ContactListFragment extends Fragment implements ContactListContract
 
             @Override
             public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+                presenter.filterContacts(editable.toString());
             }
         });
     }
 
-    //Method, which checking coincidence between entered text and name in contact list
-    private void filter(String text) {
-        List<ContactListItem> filteredContacts = new ArrayList<>();
 
-        for (ContactListItem contactItem : contacts) {
-            if (contactItem.getName().toLowerCase().contains(text.toLowerCase())) {
-                filteredContacts.add(contactItem);
-            }
-        }
+    /*---------------------------------------Show data--------------------------------------------*/
+    @Override
+    public void showContacts(List<ContactListItem> contacts) {
+        adapter.addAllContacts(contacts);
+    }
 
+    @Override
+    public void showFilteredContacts(List<ContactListItem> filteredContacts) {
         adapter.filterList(filteredContacts);
     }
 
-    //Method, which open Secondary Activity and sent data to him
     @Override
-    public void sendDataToSecondaryActivity(long id, long recruiterNotesId, String typeView) {
+    public void showNoResultContainer() {
+        no_result_container.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showSearchContainer() {
+        search_container.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showRecyclerView() {
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    /*---------------------------------------Hide data--------------------------------------------*/
+    @Override
+    public void hideNoResultContainer() {
+        no_result_container.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideSearchContainer() {
+        search_container.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideRecyclerView() {
+        recyclerView.setVisibility(View.GONE);
+    }
+
+
+    //Method, which open Secondary Activity
+    @Override
+    public void showSecondaryActivity(long id, long recruiterNotesId, String typeView) {
         ((MainActivity)getActivity()).goToSecondaryActivity(id, recruiterNotesId, typeView);
     }
+
+
 }
