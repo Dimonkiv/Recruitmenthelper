@@ -21,13 +21,11 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.MainActivity;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.lastconnect.adapter.LastConnectAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class LastConnectFragment extends Fragment implements LastConnectContract.View{
     View root;
-    private List<Contact> contacts;
     private LastConnectPresenter presenter;
     private LastConnectAdapter adapter;
 
@@ -36,6 +34,7 @@ public class LastConnectFragment extends Fragment implements LastConnectContract
     private EditText searchEdit;
     private RelativeLayout no_result_container;
     private LinearLayout search_container;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,15 +44,18 @@ public class LastConnectFragment extends Fragment implements LastConnectContract
         initEditSearchListener();
         initPresenter();
         initAdapter();
-        getDataFromPresenter();
-
 
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.loadData();
+    }
 
 
-    //InitializationView
+    /*---------------------------------------Initialization---------------------------------------*/
     private void initView() {
         recyclerView = root.findViewById(R.id.last_connect_recycler);
         searchEdit = root.findViewById(R.id.last_connect_search_edit);
@@ -61,35 +63,16 @@ public class LastConnectFragment extends Fragment implements LastConnectContract
         no_result_container = root.findViewById(R.id.last_connect_no_result_container);
     }
 
-    //Initialization presenter
     private void initPresenter() {
         presenter = new LastConnectPresenter(this);
     }
 
-    //Initialization adapter
     private void initAdapter() {
-        contacts = new ArrayList<>();
-        adapter = new LastConnectAdapter(contacts, getActivity(), presenter);
+        adapter = new LastConnectAdapter(getActivity(), presenter);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    //Method, which get contact list from presenter
-    private void getDataFromPresenter() {
-        contacts.addAll(presenter.getContact());
-        if (contacts.isEmpty()) {
-            no_result_container.setVisibility(View.VISIBLE);
-            search_container.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            no_result_container.setVisibility(View.GONE);
-            search_container.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    //Initialization TextChangeListener for search edit text
     private void initEditSearchListener() {
         searchEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -104,23 +87,51 @@ public class LastConnectFragment extends Fragment implements LastConnectContract
 
             @Override
             public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+                presenter.filterContacts(editable.toString());
             }
         });
     }
 
-    //Method, which checking coincidence between entered text and date in contact list
-    private void filter(String text) {
-        List<Contact> filteredContacts = new ArrayList<>();
 
-        for (Contact contactItem : contacts) {
-            if (contactItem.getDateOfLatestContact().toLowerCase().contains(text.toLowerCase())) {
-                filteredContacts.add(contactItem);
-            }
-        }
-
-        adapter.filterList(filteredContacts);
+    /*---------------------------------------Show data--------------------------------------------*/
+    @Override
+    public void showContacts(List<Contact> contacts) {
+        adapter.addAllContacts(contacts);
     }
+
+    @Override
+    public void showNoResultContainer() {
+        no_result_container.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showSearchContainer() {
+        search_container.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showRecyclerView() {
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+
+    /*---------------------------------------Hide data--------------------------------------------*/
+    @Override
+    public void hideNoResultContainer() {
+        no_result_container.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideSearchContainer() {
+        search_container.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideRecyclerView() {
+        recyclerView.setVisibility(View.GONE);
+    }
+
+
 
     @Override
     public void sendDataToSecondaryActivity(long id, long recruiterNotesId, String typeContent) {

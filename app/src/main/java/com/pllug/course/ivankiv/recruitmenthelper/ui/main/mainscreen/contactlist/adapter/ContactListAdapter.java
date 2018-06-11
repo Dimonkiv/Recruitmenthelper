@@ -114,10 +114,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         notifyDataSetChanged();
     }
 
-    public void filterList(List<ContactListItem> filteredContact) {
-        this.contactList = filteredContact;
-        notifyDataSetChanged();
-    }
 
     class ViewHolder extends RecyclerView.ViewHolder{
         CircleImageView photo;

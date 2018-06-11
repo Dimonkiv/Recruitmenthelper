@@ -15,6 +15,7 @@ import com.pllug.course.ivankiv.recruitmenthelper.R;
 import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.lastconnect.LastConnectPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,8 +26,8 @@ public class LastConnectAdapter extends RecyclerView.Adapter<LastConnectAdapter.
     private Context mContext;
     private LastConnectPresenter presenter;
 
-    public LastConnectAdapter(List<Contact> contacts, Context mContext,  LastConnectPresenter presenter) {
-        this.contacts = contacts;
+    public LastConnectAdapter(Context mContext, LastConnectPresenter presenter) {
+        this.contacts = new ArrayList<>();
         this.mContext = mContext;
         this.presenter = presenter;
     }
@@ -69,7 +70,7 @@ public class LastConnectAdapter extends RecyclerView.Adapter<LastConnectAdapter.
             holder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.setDataFromAdapter(contact.getId(), contact.getRecruiterNotesId(), "LastConnect");
+                    presenter.onContactItemClick(contact.getId(), contact.getRecruiterNotesId());
                 }
             });
         }
@@ -81,17 +82,19 @@ public class LastConnectAdapter extends RecyclerView.Adapter<LastConnectAdapter.
         return contacts.size();
     }
 
-    public void filterList(List<Contact> filteredContact) {
-        this.contacts = filteredContact;
+    public void addAllContacts(List<Contact> contacts) {
+        this.contacts.clear();
+        this.contacts.addAll(contacts);
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+    class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView photo;
         TextView name, phone, date;
         RelativeLayout container;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             photo = itemView.findViewById(R.id.item_last_connect_image);

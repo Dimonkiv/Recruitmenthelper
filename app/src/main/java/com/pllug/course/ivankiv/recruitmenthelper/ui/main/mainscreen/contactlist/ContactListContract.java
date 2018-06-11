@@ -11,8 +11,6 @@ interface ContactListContract {
         /*-------------------------------Show data------------------------------------------------*/
         void showContacts(List<ContactListItem> contacts);
 
-        void showFilteredContacts(List<ContactListItem> filteredContacts);
-
         void showNoResultContainer();
 
         void showSearchContainer();

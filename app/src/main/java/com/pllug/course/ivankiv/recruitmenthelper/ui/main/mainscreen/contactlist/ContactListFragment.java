@@ -97,11 +97,6 @@ public class ContactListFragment extends Fragment implements ContactListContract
     }
 
     @Override
-    public void showFilteredContacts(List<ContactListItem> filteredContacts) {
-        adapter.filterList(filteredContacts);
-    }
-
-    @Override
     public void showNoResultContainer() {
         no_result_container.setVisibility(View.VISIBLE);
     }

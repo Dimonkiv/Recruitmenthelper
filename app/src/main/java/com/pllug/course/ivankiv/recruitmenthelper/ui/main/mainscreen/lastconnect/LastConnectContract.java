@@ -7,10 +7,31 @@ import java.util.List;
 public interface LastConnectContract {
 
     interface View {
+
+        /*---------------------------------------Show data----------------------------------------*/
+        void showContacts(List<Contact> contacts);
+
+        void showNoResultContainer();
+
+        void showSearchContainer();
+
+        void showRecyclerView();
+
+        /*---------------------------------------Hide data----------------------------------------*/
+        void hideNoResultContainer();
+
+        void hideSearchContainer();
+
+        void hideRecyclerView();
+
         void sendDataToSecondaryActivity(long id, long recruiterNotesId, String typeContent);
     }
 
     interface Presenter {
-        List<Contact> getContact();
+        void loadData();
+
+        void filterContacts(String text);
+
+        void onContactItemClick(long id, long recruiterNotesId);
     }
 }

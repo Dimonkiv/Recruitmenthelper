@@ -69,7 +69,7 @@ public class ContactListPresenter implements ContactListContract.Presenter{
             }
         }
 
-        view.showFilteredContacts(filteredContacts);
+        view.showContacts(filteredContacts);
     }
 
 
