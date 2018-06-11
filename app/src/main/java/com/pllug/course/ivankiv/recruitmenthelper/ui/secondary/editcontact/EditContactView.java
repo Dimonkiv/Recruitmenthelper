@@ -213,7 +213,7 @@ public class EditContactView implements EditContactContract.View, View.OnClickLi
 
     //Method for choices photo from system gallery
     private void showGallery() {
-        fragment.startActivityForResult();
+        fragment.openGallery();
     }
 
 

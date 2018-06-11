@@ -17,6 +17,7 @@ import com.pllug.course.ivankiv.recruitmenthelper.ui.main.mainscreen.contactlist
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.selected.SelectedContactPresenter;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -26,9 +27,9 @@ public class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContact
     private List<Contact> contactList;
     private SelectedContactPresenter presenter;
 
-    public SelectedContactAdapter(Context mContext, List<Contact>  contactList, SelectedContactPresenter presenter) {
+    public SelectedContactAdapter(Context mContext, SelectedContactPresenter presenter) {
         this.mContext = mContext;
-        this.contactList = contactList;
+        this.contactList = new ArrayList<>();
         this.presenter = presenter;
     }
 
@@ -36,8 +37,8 @@ public class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContact
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_selected_contact, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+
+        return new ViewHolder(view);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContact
             holder.container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.setDataFromAdapter(contactItem.getId(), contactItem.getRecruiterNotesId(), "SelectedContact");
+                    presenter.onContactItemClick(contactItem.getId(), contactItem.getRecruiterNotesId());
                 }
             });
         }
@@ -72,7 +73,7 @@ public class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContact
                 public void onClick(View view) {
                     holder.selectedButton.setImageResource(R.drawable.icon_star_green);
                     contactItem.setSelected(false);
-                    presenter.deleteContactFromSelected(contactItem);
+                    presenter.onStarButtonClick(contactItem);
                     contactList.remove(holder.getAdapterPosition());
                     notifyItemRemoved(holder.getAdapterPosition());
                 }
@@ -87,8 +88,9 @@ public class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContact
         return contactList.size();
     }
 
-    public void filterList(List<Contact> filteredContact) {
-        this.contactList = filteredContact;
+    public void addAllContacts(List<Contact> contacts) {
+        contactList.clear();
+        contactList.addAll(contacts);
         notifyDataSetChanged();
     }
 

@@ -276,7 +276,7 @@ public class EditContactPresenter implements EditContactContract.Presenter {
 
     /*-----------------------------------------------Show data in View----------------------------------------------*/
     //Method which show data in view
-    private void showData() {
+    private void showInitialData() {
         showContact();
         showRecruiterNotes();
         view.showLanguages(languages);
@@ -507,6 +507,15 @@ public class EditContactPresenter implements EditContactContract.Presenter {
         newSkills.add(skill);
     }
 
+    @Override
+    public void setFragmentName(String fragmentName) {
+        this.fragmentName = fragmentName;
+    }
+
+    @Override
+    public void setView(EditContactContract.View view) {
+        this.view = view;
+    }
 
     /*------------------------------------------------Get data-----------------------------------*/
     @Override
@@ -515,15 +524,12 @@ public class EditContactPresenter implements EditContactContract.Presenter {
     }
 
     @Override
-    public void setFragmentName(String fragmentName) {
-        this.fragmentName = fragmentName;
-    }
-
-    @Override
     public long getRecruiterNotesId() {
         return recruiterNotesId;
     }
 
+
+    /*-------------------------------Button click handlers----------------------------------------*/
     @Override
     public void onClickSentButton() {
         if (fragmentName.equals("PhoneContactFragment")) {
@@ -551,10 +557,6 @@ public class EditContactPresenter implements EditContactContract.Presenter {
         }
     }
 
-    @Override
-    public void setView(EditContactContract.View view) {
-        this.view = view;
-    }
 
     @Override
     public void loadData() {
@@ -562,7 +564,7 @@ public class EditContactPresenter implements EditContactContract.Presenter {
         loadRecruiterNotes();
         loadLanguages();
         loadSkills();
-        showData();
+        showInitialData();
     }
 
 

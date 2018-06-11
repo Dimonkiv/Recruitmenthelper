@@ -70,6 +70,10 @@ interface EditContactContract {
 
     interface Presenter {
 
+        void showContact();
+
+
+        /*------------------------------------------------Set data--------------------------------*/
         void setContact(Contact contact);
 
         void setId(long id);
@@ -112,26 +116,29 @@ interface EditContactContract {
 
         void setSkill(Skill skill);
 
+        void setFragmentName(String fragmentName);
+
+        void setView(EditContactContract.View view);
+
+
+        /*------------------------------------------------Get data--------------------------------*/
         long getId();
 
         long getRecruiterNotesId();
 
-        void loadData();
 
-        void showContact();
-
-        void setFragmentName(String fragmentName);
-
+        /*-------------------------------Button click handlers------------------------------------*/
         void onClickSentButton();
 
         void onBackButtonClick();
 
-        void setView(EditContactContract.View view);
+
+        void loadData();
 
     }
 
     interface Fragment {
-        void startActivityForResult();
+        void openGallery();
 
         void setDataToMainActivity(String fragmentName);
 

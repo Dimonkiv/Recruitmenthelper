@@ -11,7 +11,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,15 +21,12 @@ import com.pllug.course.ivankiv.recruitmenthelper.data.model.Contact;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.MainActivity;
 import com.pllug.course.ivankiv.recruitmenthelper.ui.main.selected.adapter.SelectedContactAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelectedContactFragment extends Fragment implements SelectedContactContract.View {
     private View root;
     private SelectedContactPresenter presenter;
     private SelectedContactAdapter adapter;
-
-    private List<Contact> contacts;
 
     //View
     private RecyclerView recyclerView;
@@ -47,12 +43,18 @@ public class SelectedContactFragment extends Fragment implements SelectedContact
         initEditSearchListener();
         initPresenter();
         initAdapter();
-        getDataFromPresenter();
+
         return root;
     }
 
 
-    //InitializationView
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.loadContacts();
+    }
+
+    /*--------------------------------------Initialization----------------------------------------*/
     private void initView() {
         recyclerView = root.findViewById(R.id.selected_contact_recycler);
         searchEdit = root.findViewById(R.id.selected_contact_search_edit);
@@ -60,35 +62,16 @@ public class SelectedContactFragment extends Fragment implements SelectedContact
         no_result_container = root.findViewById(R.id.selected_contact_no_result_container);
     }
 
-    //Initialization Presenter
     private void initPresenter() {
         presenter = new SelectedContactPresenter(this);
     }
 
-    //initialization adapter
     private void initAdapter() {
-        contacts = new ArrayList<>();
-        adapter = new SelectedContactAdapter(getActivity(), contacts, presenter);
+        adapter = new SelectedContactAdapter(getActivity(), presenter);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    //Method, which get Contact from presenter
-    private void getDataFromPresenter() {
-        contacts.addAll(presenter.getContact());
-        if (contacts.isEmpty()) {
-            no_result_container.setVisibility(View.VISIBLE);
-            search_container.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            no_result_container.setVisibility(View.GONE);
-            search_container.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    //Initialization TextChangeListener for search edit text
     private void initEditSearchListener() {
         searchEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -103,22 +86,53 @@ public class SelectedContactFragment extends Fragment implements SelectedContact
 
             @Override
             public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
+                presenter.filterContacts(editable.toString());
             }
         });
     }
 
-    //Method, which checking coincidence between entered text and name in contact list
-    private void filter(String text) {
-        List<Contact> filteredContacts = new ArrayList<>();
 
-        for (Contact contactItem : contacts) {
-            if (contactItem.getName().toLowerCase().contains(text.toLowerCase())) {
-                filteredContacts.add(contactItem);
-            }
-        }
+    /*---------------------------------------Show data--------------------------------------------*/
+    @Override
+    public void showContacts(List<Contact> contacts) {
+        adapter.addAllContacts(contacts);
+    }
 
-        adapter.filterList(filteredContacts);
+    @Override
+    public void showNoResultContainer() {
+        no_result_container.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showSearchContainer() {
+        search_container.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showRecyclerView() {
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    /*---------------------------------------Hide data--------------------------------------------*/
+    @Override
+    public void hideNoResultContainer() {
+        no_result_container.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideSearchContainer() {
+        search_container.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideRecyclerView() {
+        recyclerView.setVisibility(View.GONE);
     }
 
 
